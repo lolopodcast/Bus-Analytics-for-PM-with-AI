@@ -286,7 +286,7 @@
           "前端執行環境 (Runtime)：PyScript / WebAssembly。瀏覽器直接執行 Python。",
           "產品公開部署：GitHub Pages 或 Vercel 免費部署上線。"
         ],
-        m6_datacamp: "DataCamp 翻轉教室核心模組：\n• W1-W2: Understanding AI (建立素養)\n• W2前: ChatGPT Prompt Engineering (提示工程)\n• W3-W4: Data Science for Business (商業連結)\n• W5-W6: Intro to Python (語彙建立)\n• W7-W8: Data Manipulation with pandas (清洗觀念)",
+        m6_datacamp: "DataCamp 翻轉教室核心模組：\n• W2前: ChatGPT Prompt Engineering (提示工程)\n• W1-W2: Understanding AI (建立素養)\n• W3-W4: Data Science for Business (商業連結)\n• W5-W6: Intro to Python (語彙建立)\n• W7-W8: Data Manipulation with pandas (清洗觀念)",
         m6_terms: [
           { front: "BYOK", back: "Bring Your Own Key (自帶金鑰)。一種資安機制，應用程式本身不內建 API Key，而是要求使用者在前端輸入自己的 Key 暫存於瀏覽器，確保金鑰不外洩。" },
           { front: "WebAssembly", back: "一種在瀏覽器中以接近原生速度執行程式碼的技術。PyScript 即是基於此技術，讓 Python 能直接在網頁前端運行。" },
@@ -560,6 +560,17 @@
       {name:"Peer Review",pct:"15%",desc:"Anonymous peer review at midterm & final. Score = Team × Peer coefficient (0.7~1.3)."}
     ]}};
 
+    // --- Component: Assessment Panel ---
+    const AssessmentPanel = ({ lang }) => {
+      const ad = assessData[lang];
+      return (
+        <div className="mt-6 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden p-5 md:p-6">
+          <h4 className="text-lg font-bold text-brand-primary dark:text-brand-secondary mb-4 flex items-center">📋 {ad.title}</h4>
+          <div className="space-y-3">{ad.items.map((item, i) => <div key={i} className="flex flex-col sm:flex-row gap-2 sm:gap-4 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl border border-slate-200 dark:border-slate-600"><div className="flex items-center gap-3 sm:w-48 flex-shrink-0"><span className="text-2xl font-black text-brand-primary dark:text-brand-secondary">{item.pct}</span><span className="text-sm font-bold text-slate-700 dark:text-slate-200">{item.name}</span></div><p className="text-sm text-slate-600 dark:text-slate-300">{item.desc}</p></div>)}</div>
+        </div>
+      );
+    };
+
     // --- Component: Weekly Detail Tabs ---
     const WeeklyTabs = ({ weeks, lang }) => {
       const [activeWeek, setActiveWeek] = useState(0);
@@ -588,37 +599,6 @@
               </div>
             </div>
           </div>
-        </div>
-      );
-    };
-
-    // --- Component: Assessment Panel ---
-    const AssessmentPanel = ({ lang }) => {
-      const ad = assessData[lang];
-      return (
-        <div className="mt-6 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden p-5 md:p-6">
-          <h4 className="text-lg font-bold text-brand-primary dark:text-brand-secondary mb-4 flex items-center">📋 {ad.title}</h4>
-          <div className="space-y-3">{ad.items.map((item, i) => <div key={i} className="flex flex-col sm:flex-row gap-2 sm:gap-4 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl border border-slate-200 dark:border-slate-600"><div className="flex items-center gap-3 sm:w-48 flex-shrink-0"><span className="text-2xl font-black text-brand-primary dark:text-brand-secondary">{item.pct}</span><span className="text-sm font-bold text-slate-700 dark:text-slate-200">{item.name}</span></div><p className="text-sm text-slate-600 dark:text-slate-300">{item.desc}</p></div>)}</div>
-        </div>
-      );
-    };
-
-    // --- Component: Phase Sub-tabs (Overview / Weekly / Assessment) ---
-    // Flip cards & quiz (inside children) are ALWAYS visible. Sub-tabs show additional content above them.
-    const PhaseWithTabs = ({ children, phaseKey, lang, showAssess }) => {
-      const wd = weeklyData[lang];
-      const weeks = wd[phaseKey] || [];
-      const [tab, setTab] = useState('overview');
-      return (
-        <div>
-          <div className="flex gap-2 mb-6 flex-wrap">
-            <button onClick={() => setTab('overview')} className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${tab === 'overview' ? 'bg-brand-primary text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'}`}>📖 Overview</button>
-            {weeks.length > 0 && <button onClick={() => setTab('weekly')} className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${tab === 'weekly' ? 'bg-brand-primary text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'}`}>📅 {wd.weeklyTabLabel}</button>}
-            {showAssess && <button onClick={() => setTab('assess')} className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${tab === 'assess' ? 'bg-brand-primary text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'}`}>📋 {wd.assessTabLabel}</button>}
-          </div>
-          {tab === 'overview' && children}
-          {tab === 'weekly' && <><WeeklyTabs weeks={weeks} lang={lang} />{children}</>}
-          {tab === 'assess' && <><AssessmentPanel lang={lang} />{children}</>}
         </div>
       );
     };
@@ -941,9 +921,15 @@
           window.speechSynthesis.cancel();
           
           let textToRead = "";
+          // Helper function to remove emoji at the start of a string
+          const removeEmoji = (str) => {
+            return str.replace(/^[\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]/g, '').trim();
+          };
+
           // Read all visible text from the current page (including sub-tabs)
           if (contentRef.current) {
             textToRead = contentRef.current.innerText.substring(0, 3000);
+            textToRead = removeEmoji(textToRead);
           } else if (module < 7) {
             const textSources = [
               [t.m0_title, t.m0_p1, t.m0_p2, t.m0_p3],
@@ -954,9 +940,9 @@
               [t.m5_title, t.m5_p1, t.m5_roles.map(r=>r.title + r.desc).join(" ")],
               [t.m6_title, t.m6_p1, t.m6_setup, t.m6_setup_list.join(" "), t.m6_datacamp],
             ];
-            textToRead = textSources[module].join('。 ');
+            textToRead = textSources[module].map(removeEmoji).join('。 ');
           } else {
-            textToRead = t.analytics_title + "。 " + t.analytics_desc;
+            textToRead = removeEmoji(t.analytics_title) + "。 " + t.analytics_desc;
           }
 
           const utterance = new SpeechSynthesisUtterance(textToRead);
@@ -1139,12 +1125,17 @@
             return (
               <div className={`space-y-6 text-lg leading-relaxed text-slate-700 dark:text-slate-300 ${fadeInClass}`}>
                 <h2 className="text-3xl md:text-4xl font-serif font-black text-brand-primary dark:text-brand-secondary border-b-2 border-brand-secondary pb-4">{t.m1_title}</h2>
-                <PhaseWithTabs phaseKey="phase1" lang={lang} showAssess={false}>
                 <p>{t.m1_p1}</p>
                 <div className="p-5 bg-brand-light dark:bg-slate-800 rounded-xl border-l-4 border-brand-primary dark:border-brand-secondary shadow-sm my-6">
                   <p className="font-medium text-brand-primary dark:text-brand-secondary">{t.m1_p2}</p>
                 </div>
                 <p>{t.m1_p3}</p>
+                
+                <div className="mt-10 mb-8">
+                  <h3 className="text-lg font-bold uppercase tracking-wider text-slate-500 mb-4 flex items-center"><IconBookOpen size={20} className="mr-2"/> {weeklyData[lang].weeklyTabLabel}</h3>
+                  <WeeklyTabs weeks={weeklyData[lang].phase1} lang={lang} />
+                </div>
+
                 <div className="mt-8">
                   <h3 className="text-lg font-bold uppercase tracking-wider text-slate-500 mb-4">{t.key_terms}</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1152,17 +1143,21 @@
                   </div>
                 </div>
                 <ModuleQuiz questions={t.m1_q} t={t} moduleId={module} onQuizSubmit={handleQuizSubmit} />
-                </PhaseWithTabs>
               </div>
             );
           case 2:
             return (
               <div className={`space-y-6 text-lg leading-relaxed text-slate-700 dark:text-slate-300 ${fadeInClass}`}>
                 <h2 className="text-3xl md:text-4xl font-serif font-black text-brand-primary dark:text-brand-secondary border-b-2 border-brand-secondary pb-4">{t.m2_title}</h2>
-                <PhaseWithTabs phaseKey="phase2" lang={lang} showAssess={false}>
                 <p>{t.m2_p1}</p>
                 <p>{t.m2_p2}</p>
                 <p>{t.m2_p3}</p>
+                
+                <div className="mt-10 mb-8">
+                  <h3 className="text-lg font-bold uppercase tracking-wider text-slate-500 mb-4 flex items-center"><IconBookOpen size={20} className="mr-2"/> {weeklyData[lang].weeklyTabLabel}</h3>
+                  <WeeklyTabs weeks={weeklyData[lang].phase2} lang={lang} />
+                </div>
+
                 <div className="mt-8">
                   <h3 className="text-lg font-bold uppercase tracking-wider text-slate-500 mb-4">{t.key_terms}</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1170,17 +1165,21 @@
                   </div>
                 </div>
                 <ModuleQuiz questions={t.m2_q} t={t} moduleId={module} onQuizSubmit={handleQuizSubmit} />
-                </PhaseWithTabs>
               </div>
             );
           case 3:
             return (
               <div className={`space-y-6 text-lg leading-relaxed text-slate-700 dark:text-slate-300 ${fadeInClass}`}>
                 <h2 className="text-3xl md:text-4xl font-serif font-black text-brand-primary dark:text-brand-secondary border-b-2 border-brand-secondary pb-4">{t.m3_title}</h2>
-                <PhaseWithTabs phaseKey="phase3" lang={lang} showAssess={false}>
                 <p>{t.m3_p1}</p>
                 <p>{t.m3_p2}</p>
                 <p className="p-4 bg-slate-100 dark:bg-slate-800 rounded-lg italic font-serif">{t.m3_p3}</p>
+                
+                <div className="mt-10 mb-8">
+                  <h3 className="text-lg font-bold uppercase tracking-wider text-slate-500 mb-4 flex items-center"><IconBookOpen size={20} className="mr-2"/> {weeklyData[lang].weeklyTabLabel}</h3>
+                  <WeeklyTabs weeks={weeklyData[lang].phase3} lang={lang} />
+                </div>
+
                 <div className="mt-8">
                   <h3 className="text-lg font-bold uppercase tracking-wider text-slate-500 mb-4">{t.key_terms}</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1188,7 +1187,6 @@
                   </div>
                 </div>
                 <ModuleQuiz questions={t.m3_q} t={t} moduleId={module} onQuizSubmit={handleQuizSubmit} />
-                </PhaseWithTabs>
               </div>
             );
           case 4:
@@ -1212,7 +1210,6 @@
             return (
               <div className={`space-y-6 text-lg leading-relaxed text-slate-700 dark:text-slate-300 ${fadeInClass}`}>
                 <h2 className="text-3xl md:text-4xl font-serif font-black text-brand-primary dark:text-brand-secondary border-b-2 border-brand-secondary pb-4">{t.m5_title}</h2>
-                <PhaseWithTabs phaseKey="phase4" lang={lang} showAssess={true}>
                 <p>{t.m5_p1}</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                   {t.m5_roles.map((role, i) => (
@@ -1222,6 +1219,14 @@
                     </div>
                   ))}
                 </div>
+                
+                <AssessmentPanel lang={lang} />
+
+                <div className="mt-10 mb-8">
+                  <h3 className="text-lg font-bold uppercase tracking-wider text-slate-500 mb-4 flex items-center"><IconBookOpen size={20} className="mr-2"/> {weeklyData[lang].weeklyTabLabel}</h3>
+                  <WeeklyTabs weeks={weeklyData[lang].phase4} lang={lang} />
+                </div>
+
                 <div className="mt-8">
                   <h3 className="text-lg font-bold uppercase tracking-wider text-slate-500 mb-4">{t.key_terms}</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1229,7 +1234,6 @@
                   </div>
                 </div>
                 <ModuleQuiz questions={t.m5_q} t={t} moduleId={module} onQuizSubmit={handleQuizSubmit} />
-                </PhaseWithTabs>
               </div>
             );
           case 6:
