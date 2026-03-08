@@ -112,18 +112,18 @@
         nav_prev: "上一單元",
         nav_next: "下一單元",
         
-        nav_0: "0. 課程資訊與定位",
-        nav_1: "1. Phase 1: 商管思維與 AI 素養",
-        nav_2: "2. Phase 2: 商業分析與專案管理",
-        nav_3: "3. Phase 3: 自動化與 Agentic AI",
-        nav_4: "4. 互動實驗：Multi-Agent 決策",
-        nav_5: "5. Phase 4: 團隊職能與 Demo",
-        nav_6: "6. 零成本環境與資源",
-        nav_7: "7. 學習歷程分析",
+        nav_0: "📘 0. 課程資訊與定位",
+        nav_1: "🎯 1. Phase 1: 商管思維與 AI 素養",
+        nav_2: "📊 2. Phase 2: 商業分析與專案管理",
+        nav_3: "🤖 3. Phase 3: 自動化與 Agentic AI",
+        nav_4: "⚙️ 4. 互動實驗：Multi-Agent 決策",
+        nav_5: "👥 5. Phase 4: 團隊職能與 Demo",
+        nav_6: "🖥️ 6. 零成本環境與資源",
+        nav_7: "📈 7. 學習歷程分析",
 
         flip_prompt: "點擊翻轉",
         audio_read: "語音導覽",
-        quiz_title: "模組知識檢定 (隨機 2 題)",
+        quiz_title: "模組知識檢定 (隨機 3 題)",
         submit: "提交答案",
         retry: "重新測驗",
         score: "得分",
@@ -158,63 +158,77 @@
         analytics_times: "次",
 
         // M0
-        m0_title: "課程資訊與核心定位",
+        m0_title: "📘 0. 課程資訊與核心定位",
         m0_p1: "歡迎來到 [BAPM] Business Analytics for Product Managers in the AI Era。本課程為 EMI 雙語授課，專為商管學院大三以上學生及研究生設計。我們不教授底層程式語法，而是訓練您具備「開立規格 (Prompt-as-Spec)」的高階能力。",
         m0_p2: "在這裡，您將學習如同產品經理 (PM) 一般，運用「產業生命週期與競合價值網」、JTBD 待完成任務、ORID 焦點討論法等經典商管架構，並指揮 AI 團隊（利用 AI IDE 與 Multi-Agent 系統），完成從「定義商業問題 → 任務拆解 → 指揮 AI 開發 → 產出自動化決策系統」的完整專案。",
         m0_p3: "最終產出：每組須建置一個「零伺服器 (Serverless) 的動態商業決策網頁」，結合開放資料 API 與 LLM 邏輯推理，並以「AI 團隊指揮官」身分上台進行產品提案。",
         m0_terms: [
           { front: "Prompt-as-Spec", back: "開立規格。將自然語言提示詞視為軟體工程中的需求規格書，精準指揮 AI 產出預期結果。" },
-          { front: "Serverless", back: "零伺服器架構。開發者無需管理後端伺服器，利用前端與雲端 API 完成所有運算，極大化降低硬體與維護成本。" }
+          { front: "Serverless", back: "零伺服器架構。開發者無需管理後端伺服器，利用前端與雲端 API 完成所有運算，極大化降低硬體與維護成本。" },
+          { front: "EMI", back: "English as Medium of Instruction（全英語授課）。本課程投影片與書面報告以英文為主，期末 Demo Day 須全英文簡報。" }
         ],
         m0_q: [
           { q: "本課程的核心定位是什麼？", opts: ["訓練學生具備底層 Python 演算法撰寫能力", "訓練學生具備「開立規格(Prompt-as-Spec)」的能力", "訓練學生架設實體伺服器", "背誦商管教科書理論"], ans: 1, exp: "課程宗旨在於讓商管學生像 PM 一樣指揮 AI，重點在於開立規格而非親自撰寫底層程式碼。" },
-          { q: "期末最終產出的形式為何？", opts: ["一篇 20 頁的 Word 報告", "一個需付費部署的後端系統", "零伺服器的動態商業決策網頁", "手繪的商業畫布"], ans: 2, exp: "期末要求產出一個能結合 API 與 LLM 推理的 Serverless 動態決策 SPA 網頁。" }
+          { q: "期末最終產出的形式為何？", opts: ["一篇 20 頁的 Word 報告", "一個需付費部署的後端系統", "零伺服器的動態商業決策網頁", "手繪的商業畫布"], ans: 2, exp: "期末要求產出一個能結合 API 與 LLM 推理的 Serverless 動態決策 SPA 網頁。" },
+          { q: "本課程的授課對象為何？", opts: ["資工系大一新生", "商管學院大三以上學生及研究生", "已具備 Python 進階能力者", "僅限 MBA 學生"], ans: 1, exp: "課程為商管學院大三以上學生及研究生設計，無須程式設計背景。" }
         ],
 
         // M1
-        m1_title: "Phase 1: 商管思維與 AI 素養建立",
+        m1_title: "🎯 1. Phase 1: 商管思維與 AI 素養建立",
         m1_p1: "W1-W4 的目標是讓您從傳統的「執行者」轉變為具備產品思維的「AI 指揮官」。您將組成 5 人微型產品團隊，並尋找總體 (Macro) 經濟或個體 (Micro) 競爭的產業痛點。",
         m1_p2: "在工具層面，我們將學習 LLM 的能力邊界，並熟練掌握 Prompt 的 CRF 三要素：Context (情境)、Refine (調整)、Feedback (回饋)，將模糊需求轉化為清晰的任務說明。",
         m1_p3: "在商管架構層面，我們導入 JTBD (Job To Be Done) 來釐清產品任務，並運用「產業生命週期與競合價值網」架構來拆解外部變數。最後，評估新產品開發所需的核心職能 (Competency)。",
         m1_terms: [
           { front: "CRF Framework", back: "Context(情境), Refine(調整), Feedback(回饋)。構建高品質 AI 提示詞的三大核心要素。" },
-          { front: "JTBD", back: "Job To Be Done (待完成任務)。一種創新架構，強調消費者不是在購買產品，而是在「雇用」產品來完成特定的任務或解決痛點。" }
+          { front: "JTBD", back: "Job To Be Done (待完成任務)。一種創新架構，強調消費者不是在購買產品，而是在「雇用」產品來完成特定的任務或解決痛點。" },
+          { front: "Value Net (競合價值網)", back: "由 Brandenburger & Nalebuff 提出，分析企業與顧客、供應商、競爭者、互補者之間的價值共創與競爭關係。" },
+          { front: "Product Life Cycle", back: "產業生命週期。描述產品或產業從導入、成長、成熟到衰退的不同階段，對應不同的競爭策略。" }
         ],
         m1_q: [
           { q: "Prompt 基礎中提到的 CRF 三要素是指什麼？", opts: ["Create, Run, Finish", "Context, Refine, Feedback", "Cost, Revenue, Finance", "Check, Review, Fix"], ans: 1, exp: "CRF 代表情境(Context)、調整(Refine)與回饋(Feedback)，是指導 AI 產出精確內容的關鍵步驟。" },
-          { q: "課程中使用何種綜合架構來進行外部環境變數拆解？", opts: ["SWOT 分析", "五力分析", "產業生命週期與競合價值網", "BCG 矩陣"], ans: 2, exp: "本課程整合了產業生命週期與競合價值網，以此架構來定義商業模式的邊界與外部變數。" }
+          { q: "課程中使用何種綜合架構來進行外部環境變數拆解？", opts: ["SWOT 分析", "五力分析", "產業生命週期與競合價值網", "BCG 矩陣"], ans: 2, exp: "本課程整合了產業生命週期與競合價值網，以此架構來定義商業模式的邊界與外部變數。" },
+          { q: "JTBD 架構的核心觀念是什麼？", opts: ["消費者追求最低價格", "消費者「雇用」產品來完成特定任務", "企業應專注技術研發", "市場佔有率決定一切"], ans: 1, exp: "JTBD 強調消費者不是在購買產品本身，而是在雇用它來解決特定的痛點或完成任務。" },
+          { q: "W4 的 AI 角色初探主要目的是什麼？", opts: ["教學生寫 Python", "初步釐清 AI 職能與人類 PM 職責的分界", "選出最厲害的 AI 模型", "練習資料庫查詢"], ans: 1, exp: "W4 目的是讓學生先定義需要哪些 AI 角色，初步界定 AI 與人類的職責分工。" }
         ],
 
         // M2
-        m2_title: "Phase 2: 商業分析與專案管理",
+        m2_title: "📊 2. Phase 2: 商業分析與專案管理",
         m2_p1: "W5-W9 專注於將商管問題轉化為可驗證的數據假說 (Hypothesis)。我們將學習任務拆解技巧 (Epic → User Story → Task)，並利用 AI 輔助生成 WBS (工作分解結構)。",
         m2_p2: "接著，我們導入 ORID (焦點討論法) 架構引導 AI 產出深度洞察：從 Objective (客觀數據) 出發，經過 Reflective 與 Interpretive，最終推導出 Decisional (策略)。",
         m2_p3: "最精彩的實作是「Agent Debate (代理人辯論)」。學生提出假說，由正方 Agent 找支持數據，反方 Agent 找反對數據。PM 將依據雙方結構化報告的證據強度，撰寫判定理由並決定假說是否成立。",
         m2_terms: [
           { front: "ORID", back: "焦點討論法。依序透過 Objective(客觀)、Reflective(直覺)、Interpretive(詮釋)、Decisional(決定) 四層次進行深度反思與決策的架構。" },
-          { front: "Hypothesis Testing", back: "假說檢定。在商業分析中，透過數據與 Agent 辯論，驗證某項商業直覺（如通膨對成本的影響）是否成立的過程。" }
+          { front: "Hypothesis Testing", back: "假說檢定。在商業分析中，透過數據與 Agent 辯論，驗證某項商業直覺（如通膨對成本的影響）是否成立的過程。" },
+          { front: "WBS", back: "Work Breakdown Structure（工作分解結構）。將複雜的專案目標，逐層拆解為可管理的小任務的系統化方法。" },
+          { front: "Agent Debate", back: "代理人辯論。指派正方與反方 AI Agent 各自蒐集數據進行攻防，協助 PM 以多元視角驗證假說強健度。" }
         ],
         m2_q: [
           { q: "ORID 架構中的 'I' 代表什麼意義？", opts: ["Idea (想法)", "Input (輸入)", "Interpretive (詮釋意義)", "Investment (投資)"], ans: 2, exp: "ORID 的 I 為 Interpretive，代表針對客觀數據與直覺反應後，進行商業模式與意義上的深度詮釋。" },
-          { q: "在「Agent Debate (代理人辯論)」實作中，PM 的主要職責是什麼？", opts: ["親自撰寫爬蟲程式找數據", "擔任正方 Agent", "綜合雙方證據強度，撰寫判定理由並決定假說是否成立", "只負責報告排版"], ans: 2, exp: "PM 是決策者，需依據正反雙方 Agent 提出的結構化報告，進行最終裁決與理由論述。" }
+          { q: "在「Agent Debate (代理人辯論)」實作中，PM 的主要職責是什麼？", opts: ["親自撰寫爬蟲程式找數據", "擔任正方 Agent", "綜合雙方證據強度，撰寫判定理由並決定假說是否成立", "只負責報告排版"], ans: 2, exp: "PM 是決策者，需依據正反雙方 Agent 提出的結構化報告，進行最終裁決與理由論述。" },
+          { q: "任務拆解的層級順序為何？", opts: ["Task → Story → Epic", "Epic → User Story → Task", "Feature → Bug → Fix", "Sprint → Standup → Review"], ans: 1, exp: "正確的拆解層級為 Epic（大史詩）→ User Story（使用者故事）→ Task（最小可執行單位）。" },
+          { q: "W8 期中驗收包含哪項重要的團隊管理活動？", opts: ["期末部署上線", "第一次匿名同儕互評", "AI Pipeline 壓力測試", "DataCamp 結業考試"], ans: 1, exp: "W8 除了 Lightning Talk 展演外，還包含第一次匿名同儕互評，評估各成員的職能貢獻度。" }
         ],
 
         // M3
-        m3_title: "Phase 3: 自動化與 Agentic AI 實戰",
+        m3_title: "🤖 3. Phase 3: 自動化與 Agentic AI 實戰",
         m3_p1: "W10-W15 我們進入 AI 協作開發環境 (IDE, 如 Cursor)。您不需從零撰寫程式，而是學習「閱讀程式碼」，並指揮 AI 產出 PyScript 網頁雛形。",
         m3_p2: "我們將導入多代理人拓撲學 (Multi-Agent Topology)，定義各 AI 角色的資訊傳遞關係，並賦予 Agent 串接公開 API (Skills & Tool Use) 的能力。同時，為防範 AI 幻覺，必須在決策節點加入 Human-in-the-loop (人類介入) 機制。",
         m3_p3: "最終，我們將打造出會思考的迴圈：Data Agent 抓資料 → Analyst Agent 邏輯推理 → Critic Agent 壓力測試。並透過 Tailwind CSS 美化介面，完成 GitHub Pages 部署。",
         m3_terms: [
           { front: "Human-in-the-loop", back: "人類介入機制。在 AI 自動化流程中保留關鍵的核准節點，由人類 PM 把關，以防範 AI 幻覺與決策風險。" },
-          { front: "Multi-Agent Topology", back: "多代理人拓撲學。定義專案中多個專職 AI 角色（如數據、分析、審查）之間的工作流與資訊傳遞架構。" }
+          { front: "Multi-Agent Topology", back: "多代理人拓撲學。定義專案中多個專職 AI 角色（如數據、分析、審查）之間的工作流與資訊傳遞架構。" },
+          { front: "MCP / Tool Use", back: "Model Context Protocol / 工具使用。賦予 AI Agent 串接外部 API 的能力，讓它能實際抓取數據、操作工具，而非只靠訓練資料回答。" },
+          { front: "Chain of Thought", back: "思維鏈。引導 AI 一步步寫下推理過程的技術，能大幅提升複雜商業邏輯推演的準確度。" }
         ],
         m3_q: [
           { q: "在自動化決策流程中加入 Human-in-the-loop 的主要目的是什麼？", opts: ["增加伺服器負載", "防範 AI 幻覺與偏見，確保商業策略的安全性", "讓網頁看起來更酷", "減緩資料抓取速度"], ans: 1, exp: "人類介入機制是 AI 風險控管的核心，確保最終的商業策略經過人類 PM 的安全把關。" },
-          { q: "本課程推薦用來進行 AI 協作開發的 IDE 工具首選為何？", opts: ["Eclipse", "Sublime Text", "Cursor", "Notepad"], ans: 2, exp: "課程推薦 Cursor (或 VS Code + AI 擴充) 作為 AI 協作開發環境，讓學生能用語意直接生成與修改程式碼。" }
+          { q: "本課程推薦用來進行 AI 協作開發的 IDE 工具首選為何？", opts: ["Eclipse", "Sublime Text", "Cursor", "Notepad"], ans: 2, exp: "課程推薦 Cursor (或 VS Code + AI 擴充) 作為 AI 協作開發環境，讓學生能用語意直接生成與修改程式碼。" },
+          { q: "Multi-Agent Pipeline 的正確資料流向順序為何？", opts: ["Critic → Analyst → Data", "Data Agent → Analyst Agent → Critic Agent", "PM → Data → Deploy", "UI → API → Database"], ans: 1, exp: "正確流程為 Data Agent 抓取資料 → Analyst Agent 進行推理 → Critic Agent 進行壓力測試。" },
+          { q: "W15 期末前的最後一週主要做什麼？", opts: ["重新定義商業問題", "UI/UX 美化、GitHub Pages 部署與全英文簡報彩排", "學習 Python 進階語法", "撰寫學術論文"], ans: 1, exp: "W15 重點是產品包裝（Tailwind CSS 美化）、零成本部署與期末全英文簡報彩排。" }
         ],
 
         // M4 (Interactive)
-        m4_title: "互動實驗：Multi-Agent 決策管線",
+        m4_title: "⚙️ 4. 互動實驗：Multi-Agent 決策管線",
         m4_p1: "體驗「虛擬跨部門決策委員會」的運作邏輯。點擊下方按鈕，觀察 Data Agent、Analyst Agent 與 Critic Agent 如何接力完成任務，並由您 (Human PM) 進行最終裁決。",
         m4_run_btn: "啟動 Agent 管線",
         m4_step_data: "Data Agent (資料獲取)",
@@ -232,15 +246,17 @@
         m4_log_5b: "❌ [決策完成] PM 退回重審。策略確認：強行擴廠以保市佔，要求風險控管員重新評估避險方案。",
         m4_terms: [
           { front: "Data Pipeline", back: "資料管線。自動化抓取、清洗並轉換資料，使其可供後續分析使用的標準化流程。" },
-          { front: "Chain of Thought", back: "思維鏈。引導 AI 一步步寫下推理過程的技術，能大幅提升複雜商業邏輯推演的準確度。" }
+          { front: "Chain of Thought", back: "思維鏈。引導 AI 一步步寫下推理過程的技術，能大幅提升複雜商業邏輯推演的準確度。" },
+          { front: "Red Team (紅軍)", back: "在軍事與商業策略中，紅軍指模擬敵方或挑戰者的角色，專門找出己方計畫的漏洞與弱點。" }
         ],
         m4_q: [
           { q: "在 Multi-Agent 流程中，Critic Agent (紅軍) 的主要任務是什麼？", opts: ["負責繪製 UI 圖表", "尋找資料源與清洗缺失值", "對分析師的策略進行壓力測試，挑出邏輯漏洞與潛在風險", "負責核准最終決策"], ans: 2, exp: "Critic Agent 扮演挑戰者的角色，負責對抗與測試假說的強健度，確保策略不會因為單一視角而翻車。" },
-          { q: "當管線運行到 Human-in-the-loop 節點時，系統會發生什麼事？", opts: ["自動當機重開", "將資料傳送給外部伺服器", "暫停自動化流程，等待人類 PM 進行綜合判斷與裁決", "自動核准所有提議"], ans: 2, exp: "HITL 的精髓就是「攔截」，讓人類智慧在關鍵時刻介入，綜合多方 AI 意見後拍板定案。" }
+          { q: "當管線運行到 Human-in-the-loop 節點時，系統會發生什麼事？", opts: ["自動當機重開", "將資料傳送給外部伺服器", "暫停自動化流程，等待人類 PM 進行綜合判斷與裁決", "自動核准所有提議"], ans: 2, exp: "HITL 的精髓就是「攔截」，讓人類智慧在關鍵時刻介入，綜合多方 AI 意見後拍板定案。" },
+          { q: "Data Agent 在管線中的首要職責是什麼？", opts: ["撰寫 System Prompt", "連線外部 API 抓取資料並清洗缺失值", "美化前端介面", "進行商業假說推理"], ans: 1, exp: "Data Agent 負責透過 Tool Use 串接外部 API，抓取即時資料並清理後傳遞給下游 Agent。" }
         ],
 
         // M5
-        m5_title: "Phase 4: 團隊職能分配與評量機制",
+        m5_title: "👥 5. Phase 4: 團隊職能分配與評量機制",
         m5_p1: "期末專案採取 5 人小組編制，將小組打造為「虛擬跨部門決策委員會」。每位成員皆須負責指揮特定的 AI Agent。W16 的 Demo Day 必須全英文簡報，現場展示 Multi-Agent 系統即時抓取資料、辯論並生成策略。",
         m5_roles: [
           { title: "🧑‍✈️ 產品經理 (PM)", desc: "統籌專案，確保產品不偏離商業目標、產業生命週期與 JTBD 定義。撰寫整體運作流程的 System Prompt。" },
@@ -251,15 +267,17 @@
         ],
         m5_terms: [
           { front: "Competency Matrix", back: "職能分配矩陣。明確界定團隊中每個角色的商業職責與 AI 協作任務，避免職責重疊或三不管地帶。" },
-          { front: "Pipeline Feasibility", back: "自動化管線可執行性。期末評分重點之一，檢驗學生設計的 AI 工作流程是否能在真實環境中順暢運行。" }
+          { front: "Pipeline Feasibility", back: "自動化管線可執行性。期末評分重點之一，檢驗學生設計的 AI 工作流程是否能在真實環境中順暢運行。" },
+          { front: "System Prompt", back: "系統提示詞。定義 AI Agent 的角色、職能邊界與行為準則的核心指令，是 Multi-Agent 系統的設計藍圖。" }
         ],
         m5_q: [
           { q: "在 5 人團隊中，負責『測試極端 Edge Cases 並設計防範 AI 幻覺機制』的是哪一個職能？", opts: ["產品經理", "商業分析師", "風險控管員", "體驗設計師"], ans: 2, exp: "風險控管員擔任「紅軍」，核心職責就是壓力測試、防呆與設定人類介入節點。" },
-          { q: "期末 Demo Day 評分重點「不」包含下列何者？", opts: ["底層 Python 演算法的優化程度", "商業問題定義的精準度", "AI 團隊的職能分配邏輯", "全英文的專案溝通能力"], ans: 0, exp: "本課程不考程式寫得多好，而是考「AI 自動化管線可執行性」以及商業問題定義與溝通能力。" }
+          { q: "期末 Demo Day 評分重點「不」包含下列何者？", opts: ["底層 Python 演算法的優化程度", "商業問題定義的精準度", "AI 團隊的職能分配邏輯", "全英文的專案溝通能力"], ans: 0, exp: "本課程不考程式寫得多好，而是考「AI 自動化管線可執行性」以及商業問題定義與溝通能力。" },
+          { q: "產品經理在期末 Demo Day 的角色是什麼？", opts: ["負責寫所有程式碼", "期末主講人，統籌整場簡報與 Live Demo", "只負責按下執行按鈕", "擔任評審"], ans: 1, exp: "PM 是期末主講人，統籌專案，確保產品不偏離商業目標，並主導 Live Demo 展演動線。" }
         ],
 
         // M6
-        m6_title: "軟硬體環境與學習資源",
+        m6_title: "🖥️ 6. 軟硬體環境與學習資源",
         m6_p1: "本課程強調 100% 零成本 (Zero-Cost)。透過「零伺服器 (Serverless) + 邊緣運算 (Edge Computing)」技術哲學，免除傳統環境建置的挫折。同時結合 DataCamp 作為翻轉教室資源，建立技術語彙。",
         m6_setup: "零成本雲端環境 4-Step Setup：",
         m6_setup_list: [
@@ -268,18 +286,20 @@
           "前端執行環境 (Runtime)：PyScript / WebAssembly。瀏覽器直接執行 Python。",
           "產品公開部署：GitHub Pages 或 Vercel 免費部署上線。"
         ],
-        m6_datacamp: "DataCamp 翻轉教室核心模組：\n• W2前: ChatGPT Prompt Engineering (提示工程)\n• W1-W2: Understanding AI (建立素養)\n• W3-W4: Data Science for Business (商業連結)\n• W5-W6: Intro to Python (語彙建立)\n• W7-W8: Data Manipulation with pandas (清洗觀念)",
+        m6_datacamp: "DataCamp 翻轉教室核心模組：\n• W1-W2: Understanding AI (建立素養)\n• W2前: ChatGPT Prompt Engineering (提示工程)\n• W3-W4: Data Science for Business (商業連結)\n• W5-W6: Intro to Python (語彙建立)\n• W7-W8: Data Manipulation with pandas (清洗觀念)",
         m6_terms: [
           { front: "BYOK", back: "Bring Your Own Key (自帶金鑰)。一種資安機制，應用程式本身不內建 API Key，而是要求使用者在前端輸入自己的 Key 暫存於瀏覽器，確保金鑰不外洩。" },
-          { front: "WebAssembly", back: "一種在瀏覽器中以接近原生速度執行程式碼的技術。PyScript 即是基於此技術，讓 Python 能直接在網頁前端運行。" }
+          { front: "WebAssembly", back: "一種在瀏覽器中以接近原生速度執行程式碼的技術。PyScript 即是基於此技術，讓 Python 能直接在網頁前端運行。" },
+          { front: "PyScript", back: "讓 Python 直接在瀏覽器中執行的框架。只需在 HTML 中加入 <script type=\'py\'>，即可免除後端伺服器需求。" }
         ],
         m6_q: [
           { q: "課程嚴格要求實作 BYOK (Bring Your Own Key) 機制的目的是什麼？", opts: ["為了讓網頁載入更快", "確保金鑰不寫死於程式碼中，落實企業級資安與金鑰不落地", "強迫學生付費購買軟體", "為了連接本地的資料庫"], ans: 1, exp: "BYOK 是 Serverless 架構中非常重要的資安觀念，透過前端 sessionStorage 暫存，可避免金鑰隨原始碼外洩。" },
-          { q: "DataCamp 在本課程中的主要定位是什麼？", opts: ["訓練學生具備獨立開發大型軟體的能力", "取代所有實體課堂", "建立溝通語彙 (Vocabulary Building)，讓學生看懂程式碼以精準指揮 AI", "用來考試算成績"], ans: 2, exp: "DataCamp 的目的是讓無程式背景的學生具備基礎的 Technical Vocab，從而能寫出更專業的 Prompt 規格書。" }
+          { q: "DataCamp 在本課程中的主要定位是什麼？", opts: ["訓練學生具備獨立開發大型軟體的能力", "取代所有實體課堂", "建立溝通語彙 (Vocabulary Building)，讓學生看懂程式碼以精準指揮 AI", "用來考試算成績"], ans: 2, exp: "DataCamp 的目的是讓無程式背景的學生具備基礎的 Technical Vocab，從而能寫出更專業的 Prompt 規格書。" },
+          { q: "以下哪項不屬於「零成本雲端環境 4-Step Setup」？", opts: ["Google AI Studio", "Cursor", "Anaconda 本地安裝", "GitHub Pages"], ans: 2, exp: "課程強調零成本且無需安裝 Anaconda，4-Step 為 LLM Engine、AI IDE、PyScript Runtime、GitHub Pages。" }
         ],
 
         // Footer
-        date: "Version 2026.03.08",
+        date: "Version 2026.03.08g",
         copyright: "© 2026 All rights reserved.",
         architect: "Architect: Prof. Shihmin Lo"
       },
@@ -291,18 +311,18 @@
         nav_prev: "Prev",
         nav_next: "Next",
 
-        nav_0: "0. Course Overview",
-        nav_1: "1. Phase 1: Mindset & AI Literacy",
-        nav_2: "2. Phase 2: Analytics & PM",
-        nav_3: "3. Phase 3: Automation & Agents",
-        nav_4: "4. Interactive: Agentic Pipeline",
-        nav_5: "5. Phase 4: Competency & Demo",
-        nav_6: "6. Zero-Cost Infra & Resources",
-        nav_7: "7. Learning Analytics",
+        nav_0: "📘 0. Course Overview",
+        nav_1: "🎯 1. Phase 1: Mindset & AI Literacy",
+        nav_2: "📊 2. Phase 2: Analytics & PM",
+        nav_3: "🤖 3. Phase 3: Automation & Agents",
+        nav_4: "⚙️ 4. Interactive: Agentic Pipeline",
+        nav_5: "👥 5. Phase 4: Competency & Demo",
+        nav_6: "🖥️ 6. Zero-Cost Infra & Resources",
+        nav_7: "📈 7. Learning Analytics",
 
         flip_prompt: "Click to Flip",
         audio_read: "Audio Guide",
-        quiz_title: "Module Knowledge Check",
+        quiz_title: "Module Knowledge Check (Random 3)",
         submit: "Submit Answers",
         retry: "Retry Quiz",
         score: "Score",
@@ -335,59 +355,73 @@
         analytics_sec: "s",
         analytics_times: "clicks",
 
-        m0_title: "Course Information & Positioning",
+        m0_title: "📘 0. Course Information & Positioning",
         m0_p1: "Welcome to [BAPM] Business Analytics for Product Managers in the AI Era. This EMI course is designed for junior/senior business students and graduate students. We don't teach underlying programming syntax; instead, we train you to master the high-level capability of 'Prompt-as-Spec'.",
         m0_p2: "Here, you will act as a Product Manager (PM). By utilizing classic business frameworks like 'Industry Life Cycle & Value Net', JTBD, and ORID, you will command an AI team (via AI IDEs & Multi-Agent systems) to complete a full project: from Defining Business Problems → Task Decomposition → Commanding AI Development → to Deploying an Automated Decision System.",
         m0_p3: "Final Deliverable: Each team will build a 'Serverless dynamic business decision webpage', integrating open data APIs with LLM logical reasoning, and pitch the product as an 'AI Team Commander'.",
         m0_terms: [
           { front: "Prompt-as-Spec", back: "Treating natural language prompts as software requirements specifications, commanding AI to produce expected results precisely." },
-          { front: "Serverless", back: "An architecture where developers don't manage backend servers. Computations run via frontend and cloud APIs, minimizing hardware and maintenance costs." }
+          { front: "Serverless", back: "An architecture where developers don't manage backend servers. Computations run via frontend and cloud APIs, minimizing hardware and maintenance costs." },
+          { front: "EMI", back: "English as Medium of Instruction. Slides and reports primarily in English; final Demo Day requires full English presentation." }
         ],
         m0_q: [
           { q: "What is the core positioning of this course?", opts: ["Training students to write underlying Python algorithms", "Training students in the capability of 'Prompt-as-Spec'", "Training students to set up physical servers", "Memorizing business textbook theories"], ans: 1, exp: "The goal is to have business students command AI like a PM. The focus is on writing specifications, not coding from scratch." },
-          { q: "What is the format of the final deliverable?", opts: ["A 20-page Word report", "A backend system requiring paid deployment", "A serverless dynamic business decision webpage", "A hand-drawn business canvas"], ans: 2, exp: "The final requirement is to produce a Serverless dynamic decision SPA webpage combining APIs and LLM reasoning." }
+          { q: "What is the format of the final deliverable?", opts: ["A 20-page Word report", "A backend system requiring paid deployment", "A serverless dynamic business decision webpage", "A hand-drawn business canvas"], ans: 2, exp: "The final requirement is to produce a Serverless dynamic decision SPA webpage combining APIs and LLM reasoning." },
+          { q: "Who is the target audience for this course?", opts: ["CS freshmen", "Business school juniors/seniors and graduate students", "Advanced Python programmers", "MBA students only"], ans: 1, exp: "Designed for business school juniors/seniors and grad students with no programming background required." }
         ],
 
-        m1_title: "Phase 1: Business Mindset & AI Literacy",
+        m1_title: "🎯 1. Phase 1: Business Mindset & AI Literacy",
         m1_p1: "Weeks 1-4 aim to transition you from a traditional 'executor' to an 'AI Commander' with product mindset. You will form 5-person micro product teams and identify macro-economic or micro-competitive industry pain points.",
         m1_p2: "On the tool side, we will learn the capability boundaries of LLMs and master the CRF prompt elements: Context, Refine, and Feedback, translating ambiguous needs into clear task descriptions.",
         m1_p3: "On the business side, we introduce JTBD to clarify product tasks, and use the 'Industry Life Cycle & Value Net' framework to break down external variables. Finally, we evaluate core Competencies needed for new product development.",
         m1_terms: [
           { front: "CRF Framework", back: "Context, Refine, Feedback. The three core elements to construct high-quality AI prompts." },
-          { front: "JTBD", back: "Job To Be Done. An innovation framework emphasizing that consumers don't buy products; they 'hire' them to complete specific tasks or solve pain points." }
+          { front: "JTBD", back: "Job To Be Done. An innovation framework emphasizing that consumers don't buy products; they 'hire' them to complete specific tasks or solve pain points." },
+          { front: "Value Net", back: "Framework by Brandenburger & Nalebuff analyzing value co-creation and competition among customers, suppliers, competitors, and complementors." },
+          { front: "Product Life Cycle", back: "Describes industry stages from introduction, growth, maturity to decline, each requiring different competitive strategies." }
         ],
         m1_q: [
           { q: "What do the CRF elements mentioned in Prompt basics stand for?", opts: ["Create, Run, Finish", "Context, Refine, Feedback", "Cost, Revenue, Finance", "Check, Review, Fix"], ans: 1, exp: "CRF stands for Context, Refine, and Feedback, which are key steps to guide AI to produce precise content." },
-          { q: "Which combined framework is used in this course to analyze external environmental variables?", opts: ["SWOT Analysis", "Porter's Five Forces", "Industry Life Cycle & Value Net", "BCG Matrix"], ans: 2, exp: "The course integrates the Industry Life Cycle and Value Net as a framework to define business model boundaries and external variables." }
+          { q: "Which combined framework is used in this course to analyze external environmental variables?", opts: ["SWOT Analysis", "Porter's Five Forces", "Industry Life Cycle & Value Net", "BCG Matrix"], ans: 2, exp: "The course integrates the Industry Life Cycle and Value Net as a framework to define business model boundaries and external variables." },
+          { q: "What is the core concept of the JTBD framework?", opts: ["Consumers seek lowest price", "Consumers 'hire' products to complete specific tasks", "Companies should focus on R&D", "Market share determines everything"], ans: 1, exp: "JTBD emphasizes consumers hire products to solve specific pain points, not just to own them." },
+          { q: "What is the main purpose of W4's AI role exploration?", opts: ["Teach Python", "Clarify AI capabilities vs human PM responsibilities", "Select the best AI model", "Practice database queries"], ans: 1, exp: "W4 defines needed AI roles and preliminarily separates AI and human responsibilities." }
         ],
 
-        m2_title: "Phase 2: Business Analytics & PM",
+        m2_title: "📊 2. Phase 2: Business Analytics & PM",
         m2_p1: "Weeks 5-9 focus on transforming business problems into verifiable data Hypotheses. We will learn task breakdown techniques (Epic → User Story → Task) and use AI to generate WBS.",
         m2_p2: "Next, we introduce the ORID framework to guide AI in producing deep insights: starting from Objective data, moving through Reflective and Interpretive layers, and finally deriving Decisional Strategies.",
         m2_p3: "The highlight is the 'Agent Debate'. Students propose a hypothesis, one Agent finds supporting data, and the opposing Agent finds contradictory data. The PM writes the justification to accept or reject the hypothesis based on evidence strength.",
         m2_terms: [
           { front: "ORID", back: "A focused conversation framework guiding deep reflection and decision making through Objective, Reflective, Interpretive, and Decisional levels." },
-          { front: "Hypothesis Testing", back: "The process of verifying whether a business intuition (e.g., inflation impact on costs) holds true through data and Agent debates." }
+          { front: "Hypothesis Testing", back: "The process of verifying whether a business intuition (e.g., inflation impact on costs) holds true through data and Agent debates." },
+          { front: "WBS", back: "Work Breakdown Structure. Systematically decomposing complex project goals into manageable tasks layer by layer." },
+          { front: "Agent Debate", back: "Assigning pro and con AI Agents to each collect evidence and debate, helping PM verify hypothesis robustness from multiple angles." }
         ],
         m2_q: [
           { q: "What does the 'I' in the ORID framework stand for?", opts: ["Idea", "Input", "Interpretive", "Investment"], ans: 2, exp: "The 'I' stands for Interpretive, interpreting the deep business meaning and impact after reviewing objective data and reflective reactions." },
-          { q: "In the 'Agent Debate' exercise, what is the primary role of the PM?", opts: ["Write web scraper code manually", "Act as the Proponent Agent", "Synthesize evidence strength, write justification, and decide if the hypothesis holds", "Only format the report"], ans: 2, exp: "The PM acts as the decision-maker, rendering a final verdict and rationale based on the structured reports from both opposing Agents." }
+          { q: "In the 'Agent Debate' exercise, what is the primary role of the PM?", opts: ["Write web scraper code manually", "Act as the Proponent Agent", "Synthesize evidence strength, write justification, and decide if the hypothesis holds", "Only format the report"], ans: 2, exp: "The PM acts as the decision-maker, rendering a final verdict and rationale based on the structured reports from both opposing Agents." },
+          { q: "What is the correct task breakdown hierarchy?", opts: ["Task → Story → Epic", "Epic → User Story → Task", "Feature → Bug → Fix", "Sprint → Standup → Review"], ans: 1, exp: "Epic → User Story → Task is the correct decomposition hierarchy." },
+          { q: "What important team management activity takes place at W8?", opts: ["Final deployment", "First anonymous peer review", "AI Pipeline stress test", "DataCamp final exam"], ans: 1, exp: "W8 includes the first anonymous peer review alongside Lightning Talks." }
         ],
 
-        m3_title: "Phase 3: Automation & Agentic AI",
+        m3_title: "🤖 3. Phase 3: Automation & Agentic AI",
         m3_p1: "Weeks 10-15 enter the AI collaborative dev environment (IDE, e.g., Cursor). You won't code from scratch; you'll learn to 'read code' and command AI to output PyScript web prototypes.",
         m3_p2: "We will introduce Multi-Agent Topology, define info-passing relations among AI roles, and equip Agents with Skills (API connections). Crucially, to prevent AI hallucination, Human-in-the-loop mechanisms must be added at decision nodes.",
         m3_p3: "Ultimately, we will build a thinking loop: Data Agent fetches data → Analyst Agent reasons → Critic Agent stress-tests. Then, beautify the UI via Tailwind CSS and deploy to GitHub Pages.",
         m3_terms: [
           { front: "Human-in-the-loop", back: "Retaining key approval nodes for human PMs in AI automation processes to prevent hallucinations and manage strategic risk." },
-          { front: "Multi-Agent Topology", back: "Defining the workflow and information-passing architecture among multiple dedicated AI roles (e.g., Data, Analyst, Critic) in a project." }
+          { front: "Multi-Agent Topology", back: "Defining the workflow and information-passing architecture among multiple dedicated AI roles (e.g., Data, Analyst, Critic) in a project." },
+          { front: "MCP / Tool Use", back: "Model Context Protocol. Giving AI Agents the ability to connect external APIs for real data fetching and tool operation, not just relying on training data." },
+          { front: "Chain of Thought", back: "A prompting technique guiding AI to write down its reasoning step-by-step, drastically improving accuracy in complex business logic." }
         ],
         m3_q: [
           { q: "What is the primary purpose of adding Human-in-the-loop to an automated decision process?", opts: ["Increase server load", "Prevent AI hallucination/bias and ensure strategic safety", "Make the webpage look cooler", "Slow down data fetching"], ans: 1, exp: "The human intervention mechanism is the core of AI risk control, ensuring final business strategies are safely vetted by human PMs." },
-          { q: "Which IDE tool is recommended as the top choice for AI collaborative development in this course?", opts: ["Eclipse", "Sublime Text", "Cursor", "Notepad"], ans: 2, exp: "Cursor (or VS Code + AI extension) is recommended, allowing students to generate and modify code directly using natural language." }
+          { q: "Which IDE tool is recommended as the top choice for AI collaborative development in this course?", opts: ["Eclipse", "Sublime Text", "Cursor", "Notepad"], ans: 2, exp: "Cursor (or VS Code + AI extension) is recommended, allowing students to generate and modify code directly using natural language." },
+          { q: "What is the correct data flow order in the Multi-Agent Pipeline?", opts: ["Critic → Analyst → Data", "Data Agent → Analyst Agent → Critic Agent", "PM → Data → Deploy", "UI → API → Database"], ans: 1, exp: "The correct flow is Data Agent fetches data → Analyst Agent reasons → Critic Agent stress-tests." },
+          { q: "What is the main focus of W15, the last week before Demo Day?", opts: ["Redefine business problem", "UI beautification, GitHub Pages deployment & English rehearsal", "Learn advanced Python syntax", "Write academic paper"], ans: 1, exp: "W15 focuses on Tailwind CSS beautification, zero-cost deployment, and full English presentation rehearsal." }
         ],
 
-        m4_title: "Interactive: Multi-Agent Pipeline",
+        m4_title: "⚙️ 4. Interactive: Multi-Agent Pipeline",
         m4_p1: "Experience the logic of a 'Virtual Cross-functional Decision Committee'. Click the button below to watch how the Data, Analyst, and Critic Agents pass the baton, culminating in your final Human PM verdict.",
         m4_run_btn: "Run Agent Pipeline",
         m4_step_data: "Data Agent",
@@ -405,14 +439,16 @@
         m4_log_5b: "❌ [Decision Made] PM Rejected. Strategy: Proceed with expansion to secure market share. Risk controller to reassess hedging plans.",
         m4_terms: [
           { front: "Data Pipeline", back: "A standardized process for automatically fetching, cleaning, and transforming data for subsequent analysis." },
-          { front: "Chain of Thought", back: "A prompting technique guiding AI to write down its reasoning step-by-step, drastically improving accuracy in complex business logic." }
+          { front: "Chain of Thought", back: "A prompting technique guiding AI to write down its reasoning step-by-step, drastically improving accuracy in complex business logic." },
+          { front: "Red Team", back: "A challenger role simulating adversaries to find flaws and weaknesses in plans, used in military and business strategy." }
         ],
         m4_q: [
           { q: "In the Multi-Agent flow, what is the main task of the Critic Agent (Red Team)?", opts: ["Draw UI charts", "Fetch data and clean missing values", "Stress-test the analyst's strategy, finding logical flaws and risks", "Approve the final decision"], ans: 2, exp: "The Critic Agent plays the challenger, stress-testing hypotheses to ensure strategies aren't derailed by single-perspective blind spots." },
-          { q: "What happens when the pipeline reaches the Human-in-the-loop node?", opts: ["Auto crashes and restarts", "Sends data to an external server", "Pauses automation, waiting for the human PM's comprehensive judgment and verdict", "Automatically approves all proposals"], ans: 2, exp: "The essence of HITL is 'interception', allowing human intellect to intervene at critical moments to make the final call based on AI inputs." }
+          { q: "What happens when the pipeline reaches the Human-in-the-loop node?", opts: ["Auto crashes and restarts", "Sends data to an external server", "Pauses automation, waiting for the human PM's comprehensive judgment and verdict", "Automatically approves all proposals"], ans: 2, exp: "The essence of HITL is 'interception', allowing human intellect to intervene at critical moments to make the final call based on AI inputs." },
+          { q: "What is the Data Agent's primary responsibility in the pipeline?", opts: ["Write System Prompt", "Connect external APIs, fetch and clean data", "Beautify frontend", "Reason about business hypotheses"], ans: 1, exp: "Data Agent connects external APIs via Tool Use, fetches real-time data, cleans it, and passes it downstream." }
         ],
 
-        m5_title: "Phase 4: Competency & Assessment",
+        m5_title: "👥 5. Phase 4: Competency & Assessment",
         m5_p1: "The final project utilizes a 5-person team, structured as a 'Virtual Cross-functional Decision Committee'. Each member commands specific AI Agents. W16 Demo Day requires a full English presentation showcasing live Multi-Agent data fetching, debate, and strategy generation.",
         m5_roles: [
           { title: "🧑‍✈️ Product Manager", desc: "Oversees project, manages Life Cycle & JTBD. Writes the System Prompt defining flow." },
@@ -423,14 +459,16 @@
         ],
         m5_terms: [
           { front: "Competency Matrix", back: "Clearly defines business responsibilities and AI collaboration tasks for each role, preventing overlap or neglect." },
-          { front: "Pipeline Feasibility", back: "A key final grading metric checking whether the student-designed AI workflow can run smoothly in a real environment." }
+          { front: "Pipeline Feasibility", back: "A key final grading metric checking whether the student-designed AI workflow can run smoothly in a real environment." },
+          { front: "System Prompt", back: "Core instruction defining an AI Agent's role, boundaries, and behavior—the blueprint of the Multi-Agent system." }
         ],
         m5_q: [
           { q: "Which role is responsible for 'testing extreme edge cases and designing AI hallucination prevention'?", opts: ["Product Manager", "Business Analyst", "Risk Controller", "UI/UX Designer"], ans: 2, exp: "The Risk Controller acts as the 'Red Team', inherently responsible for stress testing, error prevention, and setting human intervention nodes." },
-          { q: "Which of the following is NOT a grading focus for the Demo Day?", opts: ["Optimization of underlying Python algorithms", "Precision of business problem definition", "Logic of AI team competency distribution", "All-English project communication skills"], ans: 0, exp: "This course does not test coding prowess, but rather 'Pipeline Feasibility', problem definition, and communication." }
+          { q: "Which of the following is NOT a grading focus for the Demo Day?", opts: ["Optimization of underlying Python algorithms", "Precision of business problem definition", "Logic of AI team competency distribution", "All-English project communication skills"], ans: 0, exp: "This course does not test coding prowess, but rather 'Pipeline Feasibility', problem definition, and communication." },
+          { q: "What is the PM's role at Demo Day?", opts: ["Write all code", "Lead presenter, orchestrate the full demo", "Just press the run button", "Act as judge"], ans: 1, exp: "PM is the lead presenter, ensuring the product aligns with business goals and orchestrating the live demo." }
         ],
 
-        m6_title: "Zero-Cost Infra & Learning Resources",
+        m6_title: "🖥️ 6. Zero-Cost Infra & Resources",
         m6_p1: "This course emphasizes 100% Zero-Cost execution. Using a 'Serverless + Edge Computing' philosophy eliminates environment setup frustrations. We integrate DataCamp as Flipped Classroom resources to build technical vocabulary.",
         m6_setup: "Zero-Cost Cloud Environment 4-Step Setup:",
         m6_setup_list: [
@@ -442,17 +480,147 @@
         m6_datacamp: "DataCamp Core Modules:\n• Pre-W2: ChatGPT Prompt Engineering\n• W1-W2: Understanding AI\n• W3-W4: Data Science for Business\n• W5-W6: Intro to Python\n• W7-W8: Data Manipulation with pandas",
         m6_terms: [
           { front: "BYOK", back: "Bring Your Own Key. A security mechanism where apps don't embed API keys but ask users to input their own, temporarily stored in the browser." },
-          { front: "WebAssembly", back: "Technology enabling code execution at near-native speed in web browsers. PyScript uses this to run Python directly on the frontend." }
+          { front: "WebAssembly", back: "Technology enabling code execution at near-native speed in web browsers. PyScript uses this to run Python directly on the frontend." },
+          { front: "PyScript", back: "A framework running Python directly in browsers via <script type='py'>, eliminating the need for backend servers." }
         ],
         m6_q: [
           { q: "What is the purpose of strictly requiring the BYOK mechanism?", opts: ["To load pages faster", "To ensure keys aren't hardcoded, implementing enterprise-grade security and key non-persistence", "To force students to buy software", "To connect to local databases"], ans: 1, exp: "BYOK is vital in Serverless security. Using sessionStorage prevents API keys from leaking via source code." },
-          { q: "What is the primary role of DataCamp in this course?", opts: ["Training students to independently develop large software", "Replacing all physical classes", "Vocabulary Building, so students can read code and precisely command AI", "Grading exams"], ans: 2, exp: "DataCamp aims to equip non-coding students with basic Technical Vocab so they can write professional Prompt specifications." }
+          { q: "What is the primary role of DataCamp in this course?", opts: ["Training students to independently develop large software", "Replacing all physical classes", "Vocabulary Building, so students can read code and precisely command AI", "Grading exams"], ans: 2, exp: "DataCamp aims to equip non-coding students with basic Technical Vocab so they can write professional Prompt specifications." },
+          { q: "Which is NOT part of the 4-Step Zero-Cost Setup?", opts: ["Google AI Studio", "Cursor", "Local Anaconda installation", "GitHub Pages"], ans: 2, exp: "No local Anaconda needed. The 4 steps are: LLM Engine, AI IDE, PyScript Runtime, GitHub Pages." }
         ],
 
-        date: "Version 2026.03.08",
+        date: "Version 2026.03.08g",
         copyright: "© 2026 All rights reserved.",
         architect: "Architect: Prof. Shihmin Lo"
       }
+    };
+
+    // --- Weekly Schedule Data (W1-W16) ---
+    const weeklyData = {zh:{
+      phase1:[
+        {wk:"W1",title:"Orientation & Team Building",sub:"課程總覽、心態轉換與團隊建立",pre:"建立小組溝通群組（如 Notion/Slack）。開始 DataCamp Understanding AI 模組。",inClass:[{s:"第1節(講授)",d:"課程精神：您不是工程師，您是「AI 團隊的指揮官」。破冰 Demo。"},{s:"第2節(組隊)",d:"建立「微型產品團隊」（5人一組），分配 PM、數據架構師、商業分析師、風險控管員、體驗設計師。"},{s:"第3節(探索)",d:"引導學生觀察產業痛點，構思 Macro 或 Micro 競爭的專案命題方向。"}],post:"確認組別分工。觀察 3 個產業痛點下週帶來討論。"},
+        {wk:"W2",title:"AI Evolution",sub:"AI 演進與提示工程",pre:"完成 DataCamp ChatGPT Prompt Engineering (1 hr)。",inClass:[{s:"第1節(講授)",d:"LLM 與 Agent 能力邊界，CRF (Context, Refine, Feedback) 三要素。"},{s:"第2節(實作)",d:"PM 帶領組員，將 W1 痛點運用 CRF 轉化為 Prompt-as-Spec。"},{s:"第3節(發表)",d:"6 組輪流分享 Prompt（每組5分鐘），教授現場餵給 AI 檢視產出。"}],post:"根據回饋修正 Prompt。完成 DataCamp Understanding AI (2 hrs)。"},
+        {wk:"W3",title:"Business Model",sub:"產業生命週期與競合價值網",pre:"開始 DataCamp Data Science for Business。",inClass:[{s:"第1節(講授)",d:"JTBD 與產業生命週期及競合價值網架構。"},{s:"第2節(討論)",d:"各組運用架構拆解外部環境變數（對應 FRED 總經數據）。"},{s:"第3節(發表)",d:"6 組以白板或 Miro 展示商業模式邊界與 JTBD，教授點評。"}],post:"繳交「專案 JTBD 與環境變動要素」清單。"},
+        {wk:"W4",title:"New Product Development",sub:"Competency 核心職能",pre:"完成 DataCamp Data Science for Business (2 hrs)。",inClass:[{s:"第1節(講授)",d:"新產品開發流程與核心職能評估。介紹 AI 角色概念。"},{s:"第2節(工作坊)",d:"釐清「AI 職能」與「人類 PM 職責」分界。繪製 AI 團隊組織圖。"},{s:"第3節(實作)",d:"體驗設計師構思決策產品的 Wireframe。"}],post:"繳交「AI 角色初探與人類職能對應表」。"}
+      ],
+      phase2:[
+        {wk:"W5",title:"Project Management",sub:"104 人力銀行案例",pre:"開始 DataCamp Introduction to Python (Ch 1 & 2)。",inClass:[{s:"第1節(講授)",d:"任務拆解技巧 (Epic → User Story → Task)，以 104 人力銀行為例。"},{s:"第2節(實作)",d:"指揮 AI 輔助生成 WBS。"},{s:"第3節(核對)",d:"教授巡迴確認 WBS 範疇，協助收斂。"}],post:"完成 DataCamp Python (2 hrs)。"},
+        {wk:"W6",title:"Data-driven Decision Making",sub:"ORID 焦點討論法",pre:"預習 ORID 架構。",inClass:[{s:"第1節(講授)",d:"深入講解 ORID 架構。"},{s:"第2節(演練)",d:"商業分析師設計 ORID Prompt。"},{s:"第3節(決策)",d:"根據 AI 產出的 Interpretive，小組討論 Decisional 策略。"}],post:"撰寫 ORID 分析草稿。"},
+        {wk:"W7",title:"Business Analytics",sub:"Hypothesis Testing & Agent Debate",pre:"開始 DataCamp pandas (Ch 1)。",inClass:[{s:"第1節(講授)",d:"商業假說檢定與 Agent Debate 機制。"},{s:"第2節(實作)",d:"風險控管員設定反方 Agent，商業分析師設定正方 Agent。"},{s:"第3節(裁決)",d:"PM 撰寫書面判定理由，決議假說是否成立。"}],post:"統整前 7 週，準備期中投影片。完成 DataCamp pandas (1 hr)。"},
+        {wk:"W8",title:"Midterm Review",sub:"期中驗收",pre:"上傳期中簡報。",inClass:[{s:"第1-2節(展演)",d:"6 組 Lightning Talk（每組15分鐘：10分報告 + 5分 Q&A）。"},{s:"第3節(講評)",d:"教授總評。第一次匿名同儕互評。"}],post:"根據期中回饋修正專案方向。"},
+        {wk:"W9",title:"Term Project Proposal",sub:"期末專案提案",pre:"草擬 Flow Design。",inClass:[{s:"第1節(講授)",d:"如何繪製標準 Flow Design。"},{s:"第2節(實作)",d:"各組定稿企劃書與 Flow Design。"},{s:"第3節(提案)",d:"向教授 Pitch，取得 Go/No-Go 評估。"}],post:"取得 API Keys (Google AI Studio, FRED 等)。"}
+      ],
+      phase3:[
+        {wk:"W10",title:"IDE Setup & Tech Bridge",sub:"技術銜接工作坊",pre:"安裝 Cursor 或 VS Code。準備 API Keys。",inClass:[{s:"第1節(安裝)",d:"確保全班開啟 Cursor。介紹「閱讀程式碼」基礎。"},{s:"第2節(Workshop)",d:"Step-by-step 跑通 PyScript + FRED API HTML 範例。"},{s:"第3節(除錯)",d:"數據架構師協助確保即時數據成功渲染。"}],post:"GitHub Repository 建立完成。"},
+        {wk:"W11",title:"Business Process Automation",sub:"Human-in-the-loop",pre:"思考專案中的數據風險或 AI 幻覺。",inClass:[{s:"第1節(講授)",d:"AI 幻覺、偏見與資安 (BYOK)。"},{s:"第2節(設計)",d:"風險控管員在 Flow Design 中標示 HITL 決策節點。"},{s:"第3節(實作)",d:"在 Cursor 中指揮 AI 寫出審核按鈕邏輯。"}],post:"完成加入 HITL 機制的網頁雛形。"},
+        {wk:"W12",title:"Multi-Agent Topology",sub:"多代理人拓撲",pre:"複習 W4 AI 角色定義。",inClass:[{s:"第1節(講授)",d:"Multi-Agent Topology：定義資訊傳遞關係。"},{s:"第2節(實作)",d:"PM 與商業分析師撰寫各 Agent 的 System Prompt。"},{s:"第3節(測試)",d:"在 IDE 中測試 Prompt 是否有指令衝突。"}],post:"將 System Prompts 寫入 HTML/Python 變數。"},
+        {wk:"W13",title:"Agentic AI part 1",sub:"MCP, Skills & Tool Use",pre:"研究外部 API 文件 (FRED, Google Maps)。",inClass:[{s:"第1節(講授)",d:"代理人交接 (Handoff) 與 Tool Use。"},{s:"第2節(實作)",d:"數據架構師指揮 AI 撰寫 API 串接程式碼。"},{s:"第3節(優化)",d:"處理 JSON 解析，確保 Data Agent 穩定。"}],post:"完成 Data Pipeline 代碼。"},
+        {wk:"W14",title:"Agentic AI part 2",sub:"Data & Reasoning Pipeline",pre:"確保 API 抓取功能正常。",inClass:[{s:"第1節(講授)",d:"Chain of Thought 在自動化管線中的應用。"},{s:"第2節(實作)",d:"串聯「Data → Analyst → Critic」Pipeline。"},{s:"第3節(測試)",d:"輸入極端數據驗證 Pipeline。"}],post:"Pipeline 最終除錯。"},
+        {wk:"W15",title:"Agentic AI part 3",sub:"UI/UX & Deployment",pre:"準備簡報故事線。",inClass:[{s:"第1節(實作)",d:"體驗設計師指揮 AI 用 Tailwind CSS 美化介面。"},{s:"第2節(部署)",d:"SPA 部署至 GitHub Pages。"},{s:"第3節(彩排)",d:"全英文簡報彩排，教授給予建議。"}],post:"製作期末全英文 PPT，完成互評表。"}
+      ],
+      phase4:[{wk:"W16",title:"Demo Day",sub:"期末成果展演",pre:"準備簡報與 API Key。",inClass:[{s:"第1-3節(Demo)",d:"6 組輪流上台（每組20分鐘：15分全英文簡報 + Live Demo + 5分 Q&A）。現場展示 Multi-Agent 即時抓取資料、辯論並生成策略。"}],post:"課程結束，結算成績。"}],
+      weeklyTabLabel:"每週進度細節",preClass:"課前準備",inClassLabel:"課中 150 分鐘",postClass:"課後作業",assessTabLabel:"本課程評分規則"
+    },en:{
+      phase1:[
+        {wk:"W1",title:"Orientation & Team Building",sub:"Overview, Mindset & Teams",pre:"Set up team comm (Notion/Slack). Start DataCamp Understanding AI.",inClass:[{s:"Session 1 (Lecture)",d:"Course spirit: You are an 'AI Team Commander'. Ice-breaker Demo."},{s:"Session 2 (Team)",d:"Form 5-person teams with PM, Data Architect, Analyst, Risk Controller, UI/UX roles."},{s:"Session 3 (Explore)",d:"Identify industry pain points for project direction."}],post:"Confirm roles. Bring 3 pain points next week."},
+        {wk:"W2",title:"AI Evolution",sub:"Prompt Engineering",pre:"Complete DataCamp Prompt Engineering (1 hr).",inClass:[{s:"Session 1 (Lecture)",d:"LLM/Agent boundaries. CRF framework."},{s:"Session 2 (Practice)",d:"PM leads: convert pain points to Prompt-as-Spec using CRF."},{s:"Session 3 (Share)",d:"6 teams present prompts. Professor tests live with AI."}],post:"Refine prompts. Complete DataCamp Understanding AI (2 hrs)."},
+        {wk:"W3",title:"Business Model",sub:"Life Cycle & Value Net",pre:"Start DataCamp Data Science for Business.",inClass:[{s:"Session 1 (Lecture)",d:"JTBD and Industry Life Cycle & Value Net."},{s:"Session 2 (Discussion)",d:"Teams break down external variables using FRED data."},{s:"Session 3 (Present)",d:"6 teams show business model boundaries via Miro."}],post:"Submit 'JTBD & Environmental Variables' document."},
+        {wk:"W4",title:"New Product Development",sub:"Competency",pre:"Complete DataCamp Data Science for Business (2 hrs).",inClass:[{s:"Session 1 (Lecture)",d:"NPD process & Competency. AI role concepts."},{s:"Session 2 (Workshop)",d:"Define AI vs human PM boundaries. Draft AI org chart."},{s:"Session 3 (Practice)",d:"UI/UX Designer sketches product wireframe."}],post:"Submit 'AI Role & Human Competency Mapping Table'."}
+      ],
+      phase2:[
+        {wk:"W5",title:"Project Management",sub:"104 Job Bank Case",pre:"Start DataCamp Python (Ch 1 & 2).",inClass:[{s:"Session 1 (Lecture)",d:"Task breakdown (Epic → User Story → Task)."},{s:"Session 2 (Practice)",d:"AI-assisted WBS generation."},{s:"Session 3 (Review)",d:"Professor reviews WBS scope."}],post:"Complete DataCamp Python (2 hrs)."},
+        {wk:"W6",title:"Data-driven Decision",sub:"ORID Framework",pre:"Preview ORID.",inClass:[{s:"Session 1 (Lecture)",d:"ORID deep dive."},{s:"Session 2 (Exercise)",d:"Analyst designs ORID prompts."},{s:"Session 3 (Decision)",d:"Team discusses Decisional strategies."}],post:"Draft ORID analysis."},
+        {wk:"W7",title:"Business Analytics",sub:"Hypothesis & Agent Debate",pre:"Start DataCamp pandas (Ch 1).",inClass:[{s:"Session 1 (Lecture)",d:"Hypothesis Testing & Agent Debate."},{s:"Session 2 (Practice)",d:"Risk Controller sets opposing Agent; Analyst sets supporting."},{s:"Session 3 (Verdict)",d:"PM writes verdict based on both reports."}],post:"Prepare midterm slides. Complete DataCamp pandas."},
+        {wk:"W8",title:"Midterm Review",sub:"Lightning Talk",pre:"Upload presentation.",inClass:[{s:"Sessions 1-2 (Present)",d:"6 teams Lightning Talk (15 min each)."},{s:"Session 3 (Review)",d:"Professor summary. First Peer Review."}],post:"Revise project based on feedback."},
+        {wk:"W9",title:"Project Proposal",sub:"Final Pitch",pre:"Draft Flow Design.",inClass:[{s:"Session 1 (Lecture)",d:"Standard Flow Design methodology."},{s:"Session 2 (Practice)",d:"Finalize proposal & Flow Design."},{s:"Session 3 (Pitch)",d:"Go/No-Go feasibility assessment."}],post:"Obtain API Keys."}
+      ],
+      phase3:[
+        {wk:"W10",title:"IDE & Tech Bridge",sub:"Workshop",pre:"Install Cursor/VS Code. Prepare API Keys.",inClass:[{s:"Session 1 (Setup)",d:"Ensure Cursor works. Code-reading basics."},{s:"Session 2 (Workshop)",d:"Step-by-step PyScript + FRED API example."},{s:"Session 3 (Debug)",d:"Data Architect helps team debug."}],post:"GitHub Repository setup."},
+        {wk:"W11",title:"Process Automation",sub:"Human-in-the-loop",pre:"Think about data risks/AI hallucinations.",inClass:[{s:"Session 1 (Lecture)",d:"AI hallucination, bias & BYOK security."},{s:"Session 2 (Design)",d:"Risk Controller marks HITL nodes on Flow Design."},{s:"Session 3 (Practice)",d:"Command AI to write approval button logic."}],post:"Complete HITL webpage prototype."},
+        {wk:"W12",title:"Multi-Agent Topology",sub:"Agent Architecture",pre:"Review W4 AI roles.",inClass:[{s:"Session 1 (Lecture)",d:"Multi-Agent Topology: info-passing relations."},{s:"Session 2 (Practice)",d:"Write System Prompts for each Agent."},{s:"Session 3 (Test)",d:"Test for instruction conflicts."}],post:"Finalize System Prompts in code."},
+        {wk:"W13",title:"Agentic AI part 1",sub:"MCP & Tool Use",pre:"Research API documentation.",inClass:[{s:"Session 1 (Lecture)",d:"Agent Handoff & Tool Use."},{s:"Session 2 (Practice)",d:"Data Architect commands API integration code."},{s:"Session 3 (Optimize)",d:"Handle JSON parsing, ensure stability."}],post:"Complete Data Pipeline code."},
+        {wk:"W14",title:"Agentic AI part 2",sub:"Reasoning Pipeline",pre:"Ensure API fetching works.",inClass:[{s:"Session 1 (Lecture)",d:"Chain of Thought in pipelines."},{s:"Session 2 (Practice)",d:"Build Data → Analyst → Critic pipeline."},{s:"Session 3 (Test)",d:"Extreme data testing."}],post:"Final Pipeline debugging."},
+        {wk:"W15",title:"Agentic AI part 3",sub:"UI/UX & Deploy",pre:"Prepare presentation storyline.",inClass:[{s:"Session 1 (Practice)",d:"Tailwind CSS beautification."},{s:"Session 2 (Deploy)",d:"Deploy to GitHub Pages."},{s:"Session 3 (Rehearse)",d:"Full English rehearsal."}],post:"Create final PPT. Complete peer review form."}
+      ],
+      phase4:[{wk:"W16",title:"Demo Day",sub:"Final Showcase",pre:"Prepare presentation & API Key.",inClass:[{s:"Sessions 1-3 (Demo)",d:"6 teams present (20 min each). Live Multi-Agent demo with real-time data."}],post:"Course ends. Final grades."}],
+      weeklyTabLabel:"Weekly Schedule",preClass:"Pre-class",inClassLabel:"In-class 150 min",postClass:"Post-class",assessTabLabel:"Grading Rules"
+    }};
+
+    const assessData = {zh:{title:"本課程評分規則",items:[
+      {name:"個人 – DataCamp 完課",pct:"20%",desc:"W3-W7 期間完成指定模組，依完成率計分。"},
+      {name:"個人 – 課堂參與",pct:"15%",desc:"課堂出席、Moodle 瀏覽、討論貢獻、AI 實作投入度。"},
+      {name:"期中 Proposal",pct:"20%",desc:"商業問題定義 (40%)、ORID 分析深度 (30%)、表達與視覺 (30%)。"},
+      {name:"期末 Demo Day",pct:"30%",desc:"商業問題精準度 (25%)、AI 架構設計 (20%)、人類判斷價值 (15%)、展演與英文溝通 (20%)、Pipeline 可執行性 (20%)。"},
+      {name:"個人 – 同儕互評",pct:"15%",desc:"期中與期末各一次匿名互評。個人成績 = 團隊成績 × 同儕係數 (0.7~1.3)。"}
+    ]},en:{title:"Course Grading Rules",items:[
+      {name:"DataCamp Completion",pct:"20%",desc:"Complete assigned modules W3-W7, graded by completion rate."},
+      {name:"Participation",pct:"15%",desc:"Attendance, Moodle, discussion, AI practice effort."},
+      {name:"Midterm Proposal",pct:"20%",desc:"Business problem (40%), ORID depth (30%), presentation (30%)."},
+      {name:"Final Demo Day",pct:"30%",desc:"Business precision (25%), AI arch (20%), human judgment (15%), English (20%), Pipeline (20%)."},
+      {name:"Peer Review",pct:"15%",desc:"Anonymous peer review at midterm & final. Score = Team × Peer coefficient (0.7~1.3)."}
+    ]}};
+
+    // --- Component: Weekly Detail Tabs ---
+    const WeeklyTabs = ({ weeks, lang }) => {
+      const [activeWeek, setActiveWeek] = useState(0);
+      const wd = weeklyData[lang];
+      const w = weeks[activeWeek];
+      return (
+        <div className="mt-6 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
+          <div className="flex overflow-x-auto border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900">
+            {weeks.map((wk, i) => <button key={i} onClick={() => setActiveWeek(i)} className={`px-4 py-3 text-sm font-bold whitespace-nowrap transition-colors border-b-2 ${activeWeek === i ? 'border-brand-primary dark:border-brand-secondary text-brand-primary dark:text-brand-secondary bg-white dark:bg-slate-800' : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}>{wk.wk}</button>)}
+          </div>
+          <div className="p-5 md:p-6 animate-fade-in" key={activeWeek}>
+            <h4 className="text-lg font-bold text-brand-primary dark:text-brand-secondary mb-1">{w.wk} | {w.title}</h4>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-5">{w.sub}</p>
+            <div className="space-y-4">
+              <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-xl border-l-4 border-amber-400">
+                <h5 className="text-sm font-bold text-amber-700 dark:text-amber-300 mb-1">📋 {wd.preClass}</h5>
+                <p className="text-sm text-amber-900 dark:text-amber-200">{w.pre}</p>
+              </div>
+              <div className="bg-brand-light dark:bg-blue-900/20 p-4 rounded-xl border-l-4 border-brand-primary">
+                <h5 className="text-sm font-bold text-brand-primary dark:text-brand-secondary mb-2">🏫 {wd.inClassLabel}</h5>
+                <div className="space-y-3">{w.inClass.map((s, si) => <div key={si} className="flex gap-3"><div className="mt-1.5 w-2 h-2 rounded-full bg-brand-primary dark:bg-brand-secondary flex-shrink-0"></div><div><span className="text-sm font-bold text-slate-700 dark:text-slate-200">{s.s}：</span><span className="text-sm text-slate-600 dark:text-slate-300">{s.d}</span></div></div>)}</div>
+              </div>
+              <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-xl border-l-4 border-emerald-500">
+                <h5 className="text-sm font-bold text-emerald-700 dark:text-emerald-300 mb-1">📝 {wd.postClass}</h5>
+                <p className="text-sm text-emerald-900 dark:text-emerald-200">{w.post}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    // --- Component: Assessment Panel ---
+    const AssessmentPanel = ({ lang }) => {
+      const ad = assessData[lang];
+      return (
+        <div className="mt-6 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden p-5 md:p-6">
+          <h4 className="text-lg font-bold text-brand-primary dark:text-brand-secondary mb-4 flex items-center">📋 {ad.title}</h4>
+          <div className="space-y-3">{ad.items.map((item, i) => <div key={i} className="flex flex-col sm:flex-row gap-2 sm:gap-4 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl border border-slate-200 dark:border-slate-600"><div className="flex items-center gap-3 sm:w-48 flex-shrink-0"><span className="text-2xl font-black text-brand-primary dark:text-brand-secondary">{item.pct}</span><span className="text-sm font-bold text-slate-700 dark:text-slate-200">{item.name}</span></div><p className="text-sm text-slate-600 dark:text-slate-300">{item.desc}</p></div>)}</div>
+        </div>
+      );
+    };
+
+    // --- Component: Phase Sub-tabs (Overview / Weekly / Assessment) ---
+    // Flip cards & quiz (inside children) are ALWAYS visible. Sub-tabs show additional content above them.
+    const PhaseWithTabs = ({ children, phaseKey, lang, showAssess }) => {
+      const wd = weeklyData[lang];
+      const weeks = wd[phaseKey] || [];
+      const [tab, setTab] = useState('overview');
+      return (
+        <div>
+          <div className="flex gap-2 mb-6 flex-wrap">
+            <button onClick={() => setTab('overview')} className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${tab === 'overview' ? 'bg-brand-primary text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'}`}>📖 Overview</button>
+            {weeks.length > 0 && <button onClick={() => setTab('weekly')} className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${tab === 'weekly' ? 'bg-brand-primary text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'}`}>📅 {wd.weeklyTabLabel}</button>}
+            {showAssess && <button onClick={() => setTab('assess')} className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${tab === 'assess' ? 'bg-brand-primary text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'}`}>📋 {wd.assessTabLabel}</button>}
+          </div>
+          {tab === 'overview' && children}
+          {tab === 'weekly' && <><WeeklyTabs weeks={weeks} lang={lang} />{children}</>}
+          {tab === 'assess' && <><AssessmentPanel lang={lang} />{children}</>}
+        </div>
+      );
     };
 
     // --- Component: Flip Card ---
@@ -481,14 +649,14 @@
     // --- Component: Quiz Module ---
     const ModuleQuiz = ({ questions, t, moduleId, onQuizSubmit }) => {
       const [selectedIndices, setSelectedIndices] = useState([]);
-      const [answers, setAnswers] = useState({0: null, 1: null});
+      const [answers, setAnswers] = useState({0: null, 1: null, 2: null});
       const [submitted, setSubmitted] = useState(false);
 
       const initQuiz = () => {
         if (!questions || questions.length === 0) return;
-        const indices = questions.map((_, i) => i).sort(() => 0.5 - Math.random()).slice(0, 2);
+        const indices = questions.map((_, i) => i).sort(() => 0.5 - Math.random()).slice(0, Math.min(3, questions.length));
         setSelectedIndices(indices);
-        setAnswers({0: null, 1: null});
+        const a = {}; indices.forEach((_, i) => a[i] = null); setAnswers(a);
         setSubmitted(false);
       };
 
@@ -506,7 +674,7 @@
       const handleSubmit = () => {
         setSubmitted(true);
         if (onQuizSubmit) {
-          onQuizSubmit(moduleId, score, 2); 
+          onQuizSubmit(moduleId, score, selectedIndices.length); 
         }
       };
 
@@ -567,7 +735,7 @@
             ) : (
               <>
                 <div className="text-xl font-serif font-bold text-brand-primary dark:text-brand-secondary">
-                  {t.score}: {score} / 2
+                  {t.score}: {score} / {selectedIndices.length}
                 </div>
                 <button 
                   onClick={initQuiz}
@@ -731,7 +899,7 @@
           const clicks = analytics.clicks[idx];
           const correct = analytics.quizCorrect[idx];
           const answered = analytics.quizTotal[idx];
-          const totalQ = 2; // Real rendered questions
+          const totalQ = 3;
           const acc = answered > 0 ? Math.round((correct / answered) * 100) : 0;
           const moduleTitle = m.title.replace(/,/g, '，');
           const row = [dateStr, timeStr, studentInfo.group, studentInfo.dept, studentInfo.id, studentInfo.name, moduleTitle, time, clicks, correct, answered, totalQ, acc].join(",");
@@ -773,7 +941,10 @@
           window.speechSynthesis.cancel();
           
           let textToRead = "";
-          if (module < 7) {
+          // Read all visible text from the current page (including sub-tabs)
+          if (contentRef.current) {
+            textToRead = contentRef.current.innerText.substring(0, 3000);
+          } else if (module < 7) {
             const textSources = [
               [t.m0_title, t.m0_p1, t.m0_p2, t.m0_p3],
               [t.m1_title, t.m1_p1, t.m1_p2, t.m1_p3],
@@ -836,6 +1007,8 @@
             <h2 className="text-3xl md:text-4xl font-serif font-black text-brand-primary dark:text-brand-secondary border-b-2 border-brand-secondary pb-4">{t.analytics_title}</h2>
             <p className="text-lg text-slate-700 dark:text-slate-300 mb-8">{t.analytics_desc}</p>
             
+            <AssessmentPanel lang={lang} />
+            
             <div className="bg-slate-50 dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm mb-8">
               <h3 className="text-xl font-serif font-bold text-brand-primary dark:text-brand-secondary mb-4">{t.analytics_form_title}</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
@@ -890,7 +1063,7 @@
                   const clicks = analytics.clicks[idx];
                   const correct = analytics.quizCorrect[idx];
                   const answered = analytics.quizTotal[idx];
-                  const totalQ = 2; 
+                  const totalQ = 3; 
                   const acc = answered > 0 ? Math.round((correct / answered) * 100) : null;
                   
                   return (
@@ -966,6 +1139,7 @@
             return (
               <div className={`space-y-6 text-lg leading-relaxed text-slate-700 dark:text-slate-300 ${fadeInClass}`}>
                 <h2 className="text-3xl md:text-4xl font-serif font-black text-brand-primary dark:text-brand-secondary border-b-2 border-brand-secondary pb-4">{t.m1_title}</h2>
+                <PhaseWithTabs phaseKey="phase1" lang={lang} showAssess={false}>
                 <p>{t.m1_p1}</p>
                 <div className="p-5 bg-brand-light dark:bg-slate-800 rounded-xl border-l-4 border-brand-primary dark:border-brand-secondary shadow-sm my-6">
                   <p className="font-medium text-brand-primary dark:text-brand-secondary">{t.m1_p2}</p>
@@ -978,12 +1152,14 @@
                   </div>
                 </div>
                 <ModuleQuiz questions={t.m1_q} t={t} moduleId={module} onQuizSubmit={handleQuizSubmit} />
+                </PhaseWithTabs>
               </div>
             );
           case 2:
             return (
               <div className={`space-y-6 text-lg leading-relaxed text-slate-700 dark:text-slate-300 ${fadeInClass}`}>
                 <h2 className="text-3xl md:text-4xl font-serif font-black text-brand-primary dark:text-brand-secondary border-b-2 border-brand-secondary pb-4">{t.m2_title}</h2>
+                <PhaseWithTabs phaseKey="phase2" lang={lang} showAssess={false}>
                 <p>{t.m2_p1}</p>
                 <p>{t.m2_p2}</p>
                 <p>{t.m2_p3}</p>
@@ -994,12 +1170,14 @@
                   </div>
                 </div>
                 <ModuleQuiz questions={t.m2_q} t={t} moduleId={module} onQuizSubmit={handleQuizSubmit} />
+                </PhaseWithTabs>
               </div>
             );
           case 3:
             return (
               <div className={`space-y-6 text-lg leading-relaxed text-slate-700 dark:text-slate-300 ${fadeInClass}`}>
                 <h2 className="text-3xl md:text-4xl font-serif font-black text-brand-primary dark:text-brand-secondary border-b-2 border-brand-secondary pb-4">{t.m3_title}</h2>
+                <PhaseWithTabs phaseKey="phase3" lang={lang} showAssess={false}>
                 <p>{t.m3_p1}</p>
                 <p>{t.m3_p2}</p>
                 <p className="p-4 bg-slate-100 dark:bg-slate-800 rounded-lg italic font-serif">{t.m3_p3}</p>
@@ -1010,6 +1188,7 @@
                   </div>
                 </div>
                 <ModuleQuiz questions={t.m3_q} t={t} moduleId={module} onQuizSubmit={handleQuizSubmit} />
+                </PhaseWithTabs>
               </div>
             );
           case 4:
@@ -1033,6 +1212,7 @@
             return (
               <div className={`space-y-6 text-lg leading-relaxed text-slate-700 dark:text-slate-300 ${fadeInClass}`}>
                 <h2 className="text-3xl md:text-4xl font-serif font-black text-brand-primary dark:text-brand-secondary border-b-2 border-brand-secondary pb-4">{t.m5_title}</h2>
+                <PhaseWithTabs phaseKey="phase4" lang={lang} showAssess={true}>
                 <p>{t.m5_p1}</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                   {t.m5_roles.map((role, i) => (
@@ -1049,6 +1229,7 @@
                   </div>
                 </div>
                 <ModuleQuiz questions={t.m5_q} t={t} moduleId={module} onQuizSubmit={handleQuizSubmit} />
+                </PhaseWithTabs>
               </div>
             );
           case 6:
