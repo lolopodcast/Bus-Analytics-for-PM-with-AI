@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BAPM: AI 世代產品經理與商業數據分析</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Merriweather', 'serif'],
+          },
+          colors: {
+            brand: {
+              dark: '#0f172a',
+              primary: '#0369a1',
+              secondary: '#38bdf8',
+              accent: '#f59e0b',
+              light: '#f0f9ff'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- React & ReactDOM -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  
+  <!-- Babel -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in { animation: fadeInUp 0.5s ease-out forwards; }
+    
+    .perspective { perspective: 1000px; }
+    .transform-style-3d { transform-style: preserve-3d; }
+    .backface-hidden { backface-visibility: hidden; }
+    .rotate-y-180 { transform: rotateY(180deg); }
+    
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
+    .dark ::-webkit-scrollbar-thumb { background: #475569; }
+
+    /* Custom Animations for Agent Lab */
+    @keyframes pulse-border {
+      0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(56, 189, 248, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); }
+    }
+    .active-agent {
+      animation: pulse-border 2s infinite;
+      border-color: #38bdf8 !important;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 font-sans selection:bg-brand-primary selection:text-white dark:selection:bg-brand-secondary dark:selection:text-slate-900 transition-colors duration-300">
+  
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    // --- Inline SVG Icons ---
+    const IconBookOpen = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>;
+    const IconAlertTriangle = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>;
+    const IconPlayCircle = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>;
+    const IconCheckCircle = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>;
+    const IconGlobe = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>;
+    const IconChevronRight = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="9 18 15 12 9 6"></polyline></svg>;
+    const IconMenu = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="6" x2="20" y2="6"></line><line x1="4" y1="18" x2="20" y2="18"></line></svg>;
+    const IconX = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>;
+    const IconMoon = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>;
+    const IconSun = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>;
+    const IconPlay = ({size=24, fill="none", className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>;
+    const IconPause = ({size=24, fill="none", className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>;
+    const IconSquare = ({size=24, fill="none", className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>;
+    const IconChevronUp = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="18 15 12 9 6 15"></polyline></svg>;
+    const IconArrowRight = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>;
+    const IconShuffle = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>;
+    const IconActivity = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>;
+    const IconCpu = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>;
+    const IconUsers = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>;
+    const IconServer = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>;
+    const IconTarget = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>;
+    const IconWorkflow = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="3" y="3" width="6" height="6" rx="1"></rect><path d="M6 9v3a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-3"></path><rect x="15" y="3" width="6" height="6" rx="1"></rect><rect x="9" y="15" width="6" height="6" rx="1"></rect></svg>;
+    const IconBarChart2 = ({size=24, className=""}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>;
+
+    // --- Bilingual Content Dictionary ---
+    const dict = {
+      zh: {
+        title: "BAPM 產品經理與商業數據分析",
+        subtitle: "EMI 課程：AI 團隊指揮官指南",
+        nav_modules: "單元目錄",
+        key_terms: "關鍵專有名詞",
+        nav_prev: "上一單元",
+        nav_next: "下一單元",
+        
+        nav_0: "0. 課程資訊與定位",
+        nav_1: "1. Phase 1: 商管思維與 AI 素養",
+        nav_2: "2. Phase 2: 商業分析與專案管理",
+        nav_3: "3. Phase 3: 自動化與 Agentic AI",
+        nav_4: "4. 互動實驗：Multi-Agent 決策",
+        nav_5: "5. Phase 4: 團隊職能與 Demo",
+        nav_6: "6. 零成本環境與資源",
+        nav_7: "7. 學習歷程分析",
+
+        flip_prompt: "點擊翻轉",
+        audio_read: "語音導覽",
+        quiz_title: "模組知識檢定 (隨機 2 題)",
+        submit: "提交答案",
+        retry: "重新測驗",
+        score: "得分",
+        correct: "正確",
+        incorrect: "錯誤",
+        explanation: "解析",
+
+        // Analytics
+        analytics_title: "學習歷程與成效分析",
+        analytics_desc: "追蹤您在各個模組的互動狀況、投入時間與知識吸收率。",
+        analytics_form_title: "填寫基本資料以啟用匯出功能",
+        analytics_group: "組別",
+        analytics_dept: "系級",
+        analytics_dept_ph: "例：IBS3",
+        analytics_id: "學號",
+        analytics_id_ph: "例：112212099",
+        analytics_name: "姓名",
+        analytics_name_ph: "例：Jimmy Lo",
+        analytics_export_csv: "匯出 CSV 歷程記錄",
+        analytics_fill_required: "請填寫完整資訊以解鎖匯出",
+        group_options: ["G1", "G2", "G3", "G4", "G5", "G6"],
+        analytics_total_time: "總學習時間",
+        analytics_total_clicks: "總互動點擊",
+        analytics_overall_acc: "總體測驗答對率",
+        analytics_module: "模組",
+        analytics_time: "停留時間",
+        analytics_clicks: "點擊次數",
+        analytics_acc: "答對率",
+        analytics_correct_ans_total: "答對 / 已填答 / 總題數",
+        analytics_no_data: "尚未測驗",
+        analytics_sec: "秒",
+        analytics_times: "次",
+
+        // M0
+        m0_title: "課程資訊與核心定位",
+        m0_p1: "歡迎來到 [BAPM] Business Analytics for Product Managers in the AI Era。本課程為 EMI 雙語授課，專為商管學院大三以上學生及研究生設計。我們不教授底層程式語法，而是訓練您具備「開立規格 (Prompt-as-Spec)」的高階能力。",
+        m0_p2: "在這裡，您將學習如同產品經理 (PM) 一般，運用「產業生命週期與競合價值網」、JTBD 待完成任務、ORID 焦點討論法等經典商管架構，並指揮 AI 團隊（利用 AI IDE 與 Multi-Agent 系統），完成從「定義商業問題 → 任務拆解 → 指揮 AI 開發 → 產出自動化決策系統」的完整專案。",
+        m0_p3: "最終產出：每組須建置一個「零伺服器 (Serverless) 的動態商業決策網頁」，結合開放資料 API 與 LLM 邏輯推理，並以「AI 團隊指揮官」身分上台進行產品提案。",
+        m0_terms: [
+          { front: "Prompt-as-Spec", back: "開立規格。將自然語言提示詞視為軟體工程中的需求規格書，精準指揮 AI 產出預期結果。" },
+          { front: "Serverless", back: "零伺服器架構。開發者無需管理後端伺服器，利用前端與雲端 API 完成所有運算，極大化降低硬體與維護成本。" }
+        ],
+        m0_q: [
+          { q: "本課程的核心定位是什麼？", opts: ["訓練學生具備底層 Python 演算法撰寫能力", "訓練學生具備「開立規格(Prompt-as-Spec)」的能力", "訓練學生架設實體伺服器", "背誦商管教科書理論"], ans: 1, exp: "課程宗旨在於讓商管學生像 PM 一樣指揮 AI，重點在於開立規格而非親自撰寫底層程式碼。" },
+          { q: "期末最終產出的形式為何？", opts: ["一篇 20 頁的 Word 報告", "一個需付費部署的後端系統", "零伺服器的動態商業決策網頁", "手繪的商業畫布"], ans: 2, exp: "期末要求產出一個能結合 API 與 LLM 推理的 Serverless 動態決策 SPA 網頁。" }
+        ],
+
+        // M1
+        m1_title: "Phase 1: 商管思維與 AI 素養建立",
+        m1_p1: "W1-W4 的目標是讓您從傳統的「執行者」轉變為具備產品思維的「AI 指揮官」。您將組成 5 人微型產品團隊，並尋找總體 (Macro) 經濟或個體 (Micro) 競爭的產業痛點。",
+        m1_p2: "在工具層面，我們將學習 LLM 的能力邊界，並熟練掌握 Prompt 的 CRF 三要素：Context (情境)、Refine (調整)、Feedback (回饋)，將模糊需求轉化為清晰的任務說明。",
+        m1_p3: "在商管架構層面，我們導入 JTBD (Job To Be Done) 來釐清產品任務，並運用「產業生命週期與競合價值網」架構來拆解外部變數。最後，評估新產品開發所需的核心職能 (Competency)。",
+        m1_terms: [
+          { front: "CRF Framework", back: "Context(情境), Refine(調整), Feedback(回饋)。構建高品質 AI 提示詞的三大核心要素。" },
+          { front: "JTBD", back: "Job To Be Done (待完成任務)。一種創新架構，強調消費者不是在購買產品，而是在「雇用」產品來完成特定的任務或解決痛點。" }
+        ],
+        m1_q: [
+          { q: "Prompt 基礎中提到的 CRF 三要素是指什麼？", opts: ["Create, Run, Finish", "Context, Refine, Feedback", "Cost, Revenue, Finance", "Check, Review, Fix"], ans: 1, exp: "CRF 代表情境(Context)、調整(Refine)與回饋(Feedback)，是指導 AI 產出精確內容的關鍵步驟。" },
+          { q: "課程中使用何種綜合架構來進行外部環境變數拆解？", opts: ["SWOT 分析", "五力分析", "產業生命週期與競合價值網", "BCG 矩陣"], ans: 2, exp: "本課程整合了產業生命週期與競合價值網，以此架構來定義商業模式的邊界與外部變數。" }
+        ],
+
+        // M2
+        m2_title: "Phase 2: 商業分析與專案管理",
+        m2_p1: "W5-W9 專注於將商管問題轉化為可驗證的數據假說 (Hypothesis)。我們將學習任務拆解技巧 (Epic → User Story → Task)，並利用 AI 輔助生成 WBS (工作分解結構)。",
+        m2_p2: "接著，我們導入 ORID (焦點討論法) 架構引導 AI 產出深度洞察：從 Objective (客觀數據) 出發，經過 Reflective 與 Interpretive，最終推導出 Decisional (策略)。",
+        m2_p3: "最精彩的實作是「Agent Debate (代理人辯論)」。學生提出假說，由正方 Agent 找支持數據，反方 Agent 找反對數據。PM 將依據雙方結構化報告的證據強度，撰寫判定理由並決定假說是否成立。",
+        m2_terms: [
+          { front: "ORID", back: "焦點討論法。依序透過 Objective(客觀)、Reflective(直覺)、Interpretive(詮釋)、Decisional(決定) 四層次進行深度反思與決策的架構。" },
+          { front: "Hypothesis Testing", back: "假說檢定。在商業分析中，透過數據與 Agent 辯論，驗證某項商業直覺（如通膨對成本的影響）是否成立的過程。" }
+        ],
+        m2_q: [
+          { q: "ORID 架構中的 'I' 代表什麼意義？", opts: ["Idea (想法)", "Input (輸入)", "Interpretive (詮釋意義)", "Investment (投資)"], ans: 2, exp: "ORID 的 I 為 Interpretive，代表針對客觀數據與直覺反應後，進行商業模式與意義上的深度詮釋。" },
+          { q: "在「Agent Debate (代理人辯論)」實作中，PM 的主要職責是什麼？", opts: ["親自撰寫爬蟲程式找數據", "擔任正方 Agent", "綜合雙方證據強度，撰寫判定理由並決定假說是否成立", "只負責報告排版"], ans: 2, exp: "PM 是決策者，需依據正反雙方 Agent 提出的結構化報告，進行最終裁決與理由論述。" }
+        ],
+
+        // M3
+        m3_title: "Phase 3: 自動化與 Agentic AI 實戰",
+        m3_p1: "W10-W15 我們進入 AI 協作開發環境 (IDE, 如 Cursor)。您不需從零撰寫程式，而是學習「閱讀程式碼」，並指揮 AI 產出 PyScript 網頁雛形。",
+        m3_p2: "我們將導入多代理人拓撲學 (Multi-Agent Topology)，定義各 AI 角色的資訊傳遞關係，並賦予 Agent 串接公開 API (Skills & Tool Use) 的能力。同時，為防範 AI 幻覺，必須在決策節點加入 Human-in-the-loop (人類介入) 機制。",
+        m3_p3: "最終，我們將打造出會思考的迴圈：Data Agent 抓資料 → Analyst Agent 邏輯推理 → Critic Agent 壓力測試。並透過 Tailwind CSS 美化介面，完成 GitHub Pages 部署。",
+        m3_terms: [
+          { front: "Human-in-the-loop", back: "人類介入機制。在 AI 自動化流程中保留關鍵的核准節點，由人類 PM 把關，以防範 AI 幻覺與決策風險。" },
+          { front: "Multi-Agent Topology", back: "多代理人拓撲學。定義專案中多個專職 AI 角色（如數據、分析、審查）之間的工作流與資訊傳遞架構。" }
+        ],
+        m3_q: [
+          { q: "在自動化決策流程中加入 Human-in-the-loop 的主要目的是什麼？", opts: ["增加伺服器負載", "防範 AI 幻覺與偏見，確保商業策略的安全性", "讓網頁看起來更酷", "減緩資料抓取速度"], ans: 1, exp: "人類介入機制是 AI 風險控管的核心，確保最終的商業策略經過人類 PM 的安全把關。" },
+          { q: "本課程推薦用來進行 AI 協作開發的 IDE 工具首選為何？", opts: ["Eclipse", "Sublime Text", "Cursor", "Notepad"], ans: 2, exp: "課程推薦 Cursor (或 VS Code + AI 擴充) 作為 AI 協作開發環境，讓學生能用語意直接生成與修改程式碼。" }
+        ],
+
+        // M4 (Interactive)
+        m4_title: "互動實驗：Multi-Agent 決策管線",
+        m4_p1: "體驗「虛擬跨部門決策委員會」的運作邏輯。點擊下方按鈕，觀察 Data Agent、Analyst Agent 與 Critic Agent 如何接力完成任務，並由您 (Human PM) 進行最終裁決。",
+        m4_run_btn: "啟動 Agent 管線",
+        m4_step_data: "Data Agent (資料獲取)",
+        m4_step_analyst: "Analyst Agent (假說詮釋)",
+        m4_step_critic: "Critic Agent (壓力測試)",
+        m4_step_human: "Human PM (策略裁決)",
+        m4_approve: "核准策略",
+        m4_reject: "退回重審",
+        m4_log_0: "系統待命中...",
+        m4_log_1: "[Data Agent] 執行 Tool Use: 連線 FRED API... 獲取最新 CPI 通膨數據。缺失值清理完畢。傳遞至下一節點。",
+        m4_log_2: "[Analyst Agent] 接收數據。執行 ORID 架構分析。詮釋：通膨飆升將導致在地設廠成本超標。提出假說：應延緩擴廠計畫。",
+        m4_log_3: "[Critic Agent] 紅軍審查。警告：雖成本上升，但若延緩擴廠，競爭對手可能搶佔市佔率。此假說存在戰略盲點！",
+        m4_log_4: "[Human-in-the-loop] 系統暫停。請 PM 綜合判斷是否核准「延緩擴廠」策略？",
+        m4_log_5a: "✅ [決策完成] PM 已核准。策略確認：延緩實體擴廠，轉為增加數位基礎設施投資。",
+        m4_log_5b: "❌ [決策完成] PM 退回重審。策略確認：強行擴廠以保市佔，要求風險控管員重新評估避險方案。",
+        m4_terms: [
+          { front: "Data Pipeline", back: "資料管線。自動化抓取、清洗並轉換資料，使其可供後續分析使用的標準化流程。" },
+          { front: "Chain of Thought", back: "思維鏈。引導 AI 一步步寫下推理過程的技術，能大幅提升複雜商業邏輯推演的準確度。" }
+        ],
+        m4_q: [
+          { q: "在 Multi-Agent 流程中，Critic Agent (紅軍) 的主要任務是什麼？", opts: ["負責繪製 UI 圖表", "尋找資料源與清洗缺失值", "對分析師的策略進行壓力測試，挑出邏輯漏洞與潛在風險", "負責核准最終決策"], ans: 2, exp: "Critic Agent 扮演挑戰者的角色，負責對抗與測試假說的強健度，確保策略不會因為單一視角而翻車。" },
+          { q: "當管線運行到 Human-in-the-loop 節點時，系統會發生什麼事？", opts: ["自動當機重開", "將資料傳送給外部伺服器", "暫停自動化流程，等待人類 PM 進行綜合判斷與裁決", "自動核准所有提議"], ans: 2, exp: "HITL 的精髓就是「攔截」，讓人類智慧在關鍵時刻介入，綜合多方 AI 意見後拍板定案。" }
+        ],
+
+        // M5
+        m5_title: "Phase 4: 團隊職能分配與評量機制",
+        m5_p1: "期末專案採取 5 人小組編制，將小組打造為「虛擬跨部門決策委員會」。每位成員皆須負責指揮特定的 AI Agent。W16 的 Demo Day 必須全英文簡報，現場展示 Multi-Agent 系統即時抓取資料、辯論並生成策略。",
+        m5_roles: [
+          { title: "🧑‍✈️ 產品經理 (PM)", desc: "統籌專案，確保產品不偏離商業目標、產業生命週期與 JTBD 定義。撰寫整體運作流程的 System Prompt。" },
+          { title: "🕵️‍♂️ 數據架構師", desc: "尋找可靠數據源 (如 FRED API)，指揮 Data Agent 撰寫「資料獲取與清洗」程式碼。" },
+          { title: "🧑‍💼 商業分析師", desc: "提出商業假說，設計分析型 Prompt，引導 Analyst Agent 進行 ORID 解讀並產出 JSON 報告。" },
+          { title: "🦹‍♂️ 風險控管員", desc: "擔任紅軍，設計 Agent 辯論邏輯，測試極端 Edge Cases 防呆與決定 Human-in-the-loop 的節點。" },
+          { title: "🎨 體驗設計師", desc: "指揮 AI 利用 Tailwind CSS 美化視覺介面，負責 SPA 網頁之 GitHub 整合與部署。" }
+        ],
+        m5_terms: [
+          { front: "Competency Matrix", back: "職能分配矩陣。明確界定團隊中每個角色的商業職責與 AI 協作任務，避免職責重疊或三不管地帶。" },
+          { front: "Pipeline Feasibility", back: "自動化管線可執行性。期末評分重點之一，檢驗學生設計的 AI 工作流程是否能在真實環境中順暢運行。" }
+        ],
+        m5_q: [
+          { q: "在 5 人團隊中，負責『測試極端 Edge Cases 並設計防範 AI 幻覺機制』的是哪一個職能？", opts: ["產品經理", "商業分析師", "風險控管員", "體驗設計師"], ans: 2, exp: "風險控管員擔任「紅軍」，核心職責就是壓力測試、防呆與設定人類介入節點。" },
+          { q: "期末 Demo Day 評分重點「不」包含下列何者？", opts: ["底層 Python 演算法的優化程度", "商業問題定義的精準度", "AI 團隊的職能分配邏輯", "全英文的專案溝通能力"], ans: 0, exp: "本課程不考程式寫得多好，而是考「AI 自動化管線可執行性」以及商業問題定義與溝通能力。" }
+        ],
+
+        // M6
+        m6_title: "軟硬體環境與學習資源",
+        m6_p1: "本課程強調 100% 零成本 (Zero-Cost)。透過「零伺服器 (Serverless) + 邊緣運算 (Edge Computing)」技術哲學，免除傳統環境建置的挫折。同時結合 DataCamp 作為翻轉教室資源，建立技術語彙。",
+        m6_setup: "零成本雲端環境 4-Step Setup：",
+        m6_setup_list: [
+          "AI 大腦引擎 (LLM)：Google AI Studio (Gemini API)。實作 BYOK (Bring Your Own Key) 與 sessionStorage 暫存機制，金鑰絕不落地。",
+          "AI 開發環境 (IDE)：Cursor (首選) 或 VS Code + AI 擴充。利用自然語言開立規格。",
+          "前端執行環境 (Runtime)：PyScript / WebAssembly。瀏覽器直接執行 Python。",
+          "產品公開部署：GitHub Pages 或 Vercel 免費部署上線。"
+        ],
+        m6_datacamp: "DataCamp 翻轉教室核心模組：\n• W2前: ChatGPT Prompt Engineering (提示工程)\n• W1-W2: Understanding AI (建立素養)\n• W3-W4: Data Science for Business (商業連結)\n• W5-W6: Intro to Python (語彙建立)\n• W7-W8: Data Manipulation with pandas (清洗觀念)",
+        m6_terms: [
+          { front: "BYOK", back: "Bring Your Own Key (自帶金鑰)。一種資安機制，應用程式本身不內建 API Key，而是要求使用者在前端輸入自己的 Key 暫存於瀏覽器，確保金鑰不外洩。" },
+          { front: "WebAssembly", back: "一種在瀏覽器中以接近原生速度執行程式碼的技術。PyScript 即是基於此技術，讓 Python 能直接在網頁前端運行。" }
+        ],
+        m6_q: [
+          { q: "課程嚴格要求實作 BYOK (Bring Your Own Key) 機制的目的是什麼？", opts: ["為了讓網頁載入更快", "確保金鑰不寫死於程式碼中，落實企業級資安與金鑰不落地", "強迫學生付費購買軟體", "為了連接本地的資料庫"], ans: 1, exp: "BYOK 是 Serverless 架構中非常重要的資安觀念，透過前端 sessionStorage 暫存，可避免金鑰隨原始碼外洩。" },
+          { q: "DataCamp 在本課程中的主要定位是什麼？", opts: ["訓練學生具備獨立開發大型軟體的能力", "取代所有實體課堂", "建立溝通語彙 (Vocabulary Building)，讓學生看懂程式碼以精準指揮 AI", "用來考試算成績"], ans: 2, exp: "DataCamp 的目的是讓無程式背景的學生具備基礎的 Technical Vocab，從而能寫出更專業的 Prompt 規格書。" }
+        ],
+
+        // Footer
+        date: "Version 2026.03.08",
+        copyright: "© 2026 All rights reserved.",
+        architect: "Architect: Prof. Shihmin Lo"
+      },
+      en: {
+        title: "BAPM Product Manager & Analytics",
+        subtitle: "EMI Course: AI Team Commander Guide",
+        nav_modules: "Modules",
+        key_terms: "Key Terminology",
+        nav_prev: "Prev",
+        nav_next: "Next",
+
+        nav_0: "0. Course Overview",
+        nav_1: "1. Phase 1: Mindset & AI Literacy",
+        nav_2: "2. Phase 2: Analytics & PM",
+        nav_3: "3. Phase 3: Automation & Agents",
+        nav_4: "4. Interactive: Agentic Pipeline",
+        nav_5: "5. Phase 4: Competency & Demo",
+        nav_6: "6. Zero-Cost Infra & Resources",
+        nav_7: "7. Learning Analytics",
+
+        flip_prompt: "Click to Flip",
+        audio_read: "Audio Guide",
+        quiz_title: "Module Knowledge Check",
+        submit: "Submit Answers",
+        retry: "Retry Quiz",
+        score: "Score",
+        correct: "Correct",
+        incorrect: "Incorrect",
+        explanation: "Explanation",
+
+        analytics_title: "Learning Analytics & Performance",
+        analytics_desc: "Track your engagement, time spent, and knowledge retention across all modules.",
+        analytics_form_title: "Enter details to enable export",
+        analytics_group: "Group",
+        analytics_dept: "Dept",
+        analytics_dept_ph: "e.g., IBS3",
+        analytics_id: "Student ID",
+        analytics_id_ph: "e.g., 112212099",
+        analytics_name: "Name",
+        analytics_name_ph: "e.g., Jimmy Lo",
+        analytics_export_csv: "Export CSV Record",
+        analytics_fill_required: "Please fill all fields to unlock export",
+        group_options: ["G1", "G2", "G3", "G4", "G5", "G6"],
+        analytics_total_time: "Total Time",
+        analytics_total_clicks: "Total Clicks",
+        analytics_overall_acc: "Overall Accuracy",
+        analytics_module: "Module",
+        analytics_time: "Time Spent",
+        analytics_clicks: "Clicks",
+        analytics_acc: "Accuracy",
+        analytics_correct_ans_total: "Correct / Answered / Total",
+        analytics_no_data: "Not tested",
+        analytics_sec: "s",
+        analytics_times: "clicks",
+
+        m0_title: "Course Information & Positioning",
+        m0_p1: "Welcome to [BAPM] Business Analytics for Product Managers in the AI Era. This EMI course is designed for junior/senior business students and graduate students. We don't teach underlying programming syntax; instead, we train you to master the high-level capability of 'Prompt-as-Spec'.",
+        m0_p2: "Here, you will act as a Product Manager (PM). By utilizing classic business frameworks like 'Industry Life Cycle & Value Net', JTBD, and ORID, you will command an AI team (via AI IDEs & Multi-Agent systems) to complete a full project: from Defining Business Problems → Task Decomposition → Commanding AI Development → to Deploying an Automated Decision System.",
+        m0_p3: "Final Deliverable: Each team will build a 'Serverless dynamic business decision webpage', integrating open data APIs with LLM logical reasoning, and pitch the product as an 'AI Team Commander'.",
+        m0_terms: [
+          { front: "Prompt-as-Spec", back: "Treating natural language prompts as software requirements specifications, commanding AI to produce expected results precisely." },
+          { front: "Serverless", back: "An architecture where developers don't manage backend servers. Computations run via frontend and cloud APIs, minimizing hardware and maintenance costs." }
+        ],
+        m0_q: [
+          { q: "What is the core positioning of this course?", opts: ["Training students to write underlying Python algorithms", "Training students in the capability of 'Prompt-as-Spec'", "Training students to set up physical servers", "Memorizing business textbook theories"], ans: 1, exp: "The goal is to have business students command AI like a PM. The focus is on writing specifications, not coding from scratch." },
+          { q: "What is the format of the final deliverable?", opts: ["A 20-page Word report", "A backend system requiring paid deployment", "A serverless dynamic business decision webpage", "A hand-drawn business canvas"], ans: 2, exp: "The final requirement is to produce a Serverless dynamic decision SPA webpage combining APIs and LLM reasoning." }
+        ],
+
+        m1_title: "Phase 1: Business Mindset & AI Literacy",
+        m1_p1: "Weeks 1-4 aim to transition you from a traditional 'executor' to an 'AI Commander' with product mindset. You will form 5-person micro product teams and identify macro-economic or micro-competitive industry pain points.",
+        m1_p2: "On the tool side, we will learn the capability boundaries of LLMs and master the CRF prompt elements: Context, Refine, and Feedback, translating ambiguous needs into clear task descriptions.",
+        m1_p3: "On the business side, we introduce JTBD to clarify product tasks, and use the 'Industry Life Cycle & Value Net' framework to break down external variables. Finally, we evaluate core Competencies needed for new product development.",
+        m1_terms: [
+          { front: "CRF Framework", back: "Context, Refine, Feedback. The three core elements to construct high-quality AI prompts." },
+          { front: "JTBD", back: "Job To Be Done. An innovation framework emphasizing that consumers don't buy products; they 'hire' them to complete specific tasks or solve pain points." }
+        ],
+        m1_q: [
+          { q: "What do the CRF elements mentioned in Prompt basics stand for?", opts: ["Create, Run, Finish", "Context, Refine, Feedback", "Cost, Revenue, Finance", "Check, Review, Fix"], ans: 1, exp: "CRF stands for Context, Refine, and Feedback, which are key steps to guide AI to produce precise content." },
+          { q: "Which combined framework is used in this course to analyze external environmental variables?", opts: ["SWOT Analysis", "Porter's Five Forces", "Industry Life Cycle & Value Net", "BCG Matrix"], ans: 2, exp: "The course integrates the Industry Life Cycle and Value Net as a framework to define business model boundaries and external variables." }
+        ],
+
+        m2_title: "Phase 2: Business Analytics & PM",
+        m2_p1: "Weeks 5-9 focus on transforming business problems into verifiable data Hypotheses. We will learn task breakdown techniques (Epic → User Story → Task) and use AI to generate WBS.",
+        m2_p2: "Next, we introduce the ORID framework to guide AI in producing deep insights: starting from Objective data, moving through Reflective and Interpretive layers, and finally deriving Decisional Strategies.",
+        m2_p3: "The highlight is the 'Agent Debate'. Students propose a hypothesis, one Agent finds supporting data, and the opposing Agent finds contradictory data. The PM writes the justification to accept or reject the hypothesis based on evidence strength.",
+        m2_terms: [
+          { front: "ORID", back: "A focused conversation framework guiding deep reflection and decision making through Objective, Reflective, Interpretive, and Decisional levels." },
+          { front: "Hypothesis Testing", back: "The process of verifying whether a business intuition (e.g., inflation impact on costs) holds true through data and Agent debates." }
+        ],
+        m2_q: [
+          { q: "What does the 'I' in the ORID framework stand for?", opts: ["Idea", "Input", "Interpretive", "Investment"], ans: 2, exp: "The 'I' stands for Interpretive, interpreting the deep business meaning and impact after reviewing objective data and reflective reactions." },
+          { q: "In the 'Agent Debate' exercise, what is the primary role of the PM?", opts: ["Write web scraper code manually", "Act as the Proponent Agent", "Synthesize evidence strength, write justification, and decide if the hypothesis holds", "Only format the report"], ans: 2, exp: "The PM acts as the decision-maker, rendering a final verdict and rationale based on the structured reports from both opposing Agents." }
+        ],
+
+        m3_title: "Phase 3: Automation & Agentic AI",
+        m3_p1: "Weeks 10-15 enter the AI collaborative dev environment (IDE, e.g., Cursor). You won't code from scratch; you'll learn to 'read code' and command AI to output PyScript web prototypes.",
+        m3_p2: "We will introduce Multi-Agent Topology, define info-passing relations among AI roles, and equip Agents with Skills (API connections). Crucially, to prevent AI hallucination, Human-in-the-loop mechanisms must be added at decision nodes.",
+        m3_p3: "Ultimately, we will build a thinking loop: Data Agent fetches data → Analyst Agent reasons → Critic Agent stress-tests. Then, beautify the UI via Tailwind CSS and deploy to GitHub Pages.",
+        m3_terms: [
+          { front: "Human-in-the-loop", back: "Retaining key approval nodes for human PMs in AI automation processes to prevent hallucinations and manage strategic risk." },
+          { front: "Multi-Agent Topology", back: "Defining the workflow and information-passing architecture among multiple dedicated AI roles (e.g., Data, Analyst, Critic) in a project." }
+        ],
+        m3_q: [
+          { q: "What is the primary purpose of adding Human-in-the-loop to an automated decision process?", opts: ["Increase server load", "Prevent AI hallucination/bias and ensure strategic safety", "Make the webpage look cooler", "Slow down data fetching"], ans: 1, exp: "The human intervention mechanism is the core of AI risk control, ensuring final business strategies are safely vetted by human PMs." },
+          { q: "Which IDE tool is recommended as the top choice for AI collaborative development in this course?", opts: ["Eclipse", "Sublime Text", "Cursor", "Notepad"], ans: 2, exp: "Cursor (or VS Code + AI extension) is recommended, allowing students to generate and modify code directly using natural language." }
+        ],
+
+        m4_title: "Interactive: Multi-Agent Pipeline",
+        m4_p1: "Experience the logic of a 'Virtual Cross-functional Decision Committee'. Click the button below to watch how the Data, Analyst, and Critic Agents pass the baton, culminating in your final Human PM verdict.",
+        m4_run_btn: "Run Agent Pipeline",
+        m4_step_data: "Data Agent",
+        m4_step_analyst: "Analyst Agent",
+        m4_step_critic: "Critic Agent",
+        m4_step_human: "Human PM",
+        m4_approve: "Approve Strategy",
+        m4_reject: "Reject & Review",
+        m4_log_0: "System Standby...",
+        m4_log_1: "[Data Agent] Tool Use triggered: Connecting to FRED API... Fetched latest CPI data. Missing values cleaned. Passing to next node.",
+        m4_log_2: "[Analyst Agent] Data received. ORID analysis running. Interpretation: Inflation spike will cause local cost overruns. Hypothesis proposed: Delay plant expansion.",
+        m4_log_3: "[Critic Agent] Red Team Review. Warning: Delaying expansion risks losing market share to competitors. Hypothesis has strategic blind spots!",
+        m4_log_4: "[Human-in-the-loop] System paused. PM, please review and decide on the 'Delay Expansion' strategy.",
+        m4_log_5a: "✅ [Decision Made] PM Approved. Strategy: Delay physical expansion, pivot investment to digital infrastructure.",
+        m4_log_5b: "❌ [Decision Made] PM Rejected. Strategy: Proceed with expansion to secure market share. Risk controller to reassess hedging plans.",
+        m4_terms: [
+          { front: "Data Pipeline", back: "A standardized process for automatically fetching, cleaning, and transforming data for subsequent analysis." },
+          { front: "Chain of Thought", back: "A prompting technique guiding AI to write down its reasoning step-by-step, drastically improving accuracy in complex business logic." }
+        ],
+        m4_q: [
+          { q: "In the Multi-Agent flow, what is the main task of the Critic Agent (Red Team)?", opts: ["Draw UI charts", "Fetch data and clean missing values", "Stress-test the analyst's strategy, finding logical flaws and risks", "Approve the final decision"], ans: 2, exp: "The Critic Agent plays the challenger, stress-testing hypotheses to ensure strategies aren't derailed by single-perspective blind spots." },
+          { q: "What happens when the pipeline reaches the Human-in-the-loop node?", opts: ["Auto crashes and restarts", "Sends data to an external server", "Pauses automation, waiting for the human PM's comprehensive judgment and verdict", "Automatically approves all proposals"], ans: 2, exp: "The essence of HITL is 'interception', allowing human intellect to intervene at critical moments to make the final call based on AI inputs." }
+        ],
+
+        m5_title: "Phase 4: Competency & Assessment",
+        m5_p1: "The final project utilizes a 5-person team, structured as a 'Virtual Cross-functional Decision Committee'. Each member commands specific AI Agents. W16 Demo Day requires a full English presentation showcasing live Multi-Agent data fetching, debate, and strategy generation.",
+        m5_roles: [
+          { title: "🧑‍✈️ Product Manager", desc: "Oversees project, manages Life Cycle & JTBD. Writes the System Prompt defining flow." },
+          { title: "🕵️‍♂️ Data Architect", desc: "Sources reliable data (e.g., FRED API). Commands Data Agent to write fetch/clean code." },
+          { title: "🧑‍💼 Business Analyst", desc: "Proposes hypotheses, designs Analyst Prompts for ORID interpretation and JSON outputs." },
+          { title: "🦹‍♂️ Risk Controller", desc: "Acts as Red Team. Designs debate logic, stress-tests, and sets Human-in-the-loop nodes." },
+          { title: "🎨 UI/UX Designer", desc: "Commands AI via Tailwind CSS to beautify visuals. Manages GitHub SPA deployment." }
+        ],
+        m5_terms: [
+          { front: "Competency Matrix", back: "Clearly defines business responsibilities and AI collaboration tasks for each role, preventing overlap or neglect." },
+          { front: "Pipeline Feasibility", back: "A key final grading metric checking whether the student-designed AI workflow can run smoothly in a real environment." }
+        ],
+        m5_q: [
+          { q: "Which role is responsible for 'testing extreme edge cases and designing AI hallucination prevention'?", opts: ["Product Manager", "Business Analyst", "Risk Controller", "UI/UX Designer"], ans: 2, exp: "The Risk Controller acts as the 'Red Team', inherently responsible for stress testing, error prevention, and setting human intervention nodes." },
+          { q: "Which of the following is NOT a grading focus for the Demo Day?", opts: ["Optimization of underlying Python algorithms", "Precision of business problem definition", "Logic of AI team competency distribution", "All-English project communication skills"], ans: 0, exp: "This course does not test coding prowess, but rather 'Pipeline Feasibility', problem definition, and communication." }
+        ],
+
+        m6_title: "Zero-Cost Infra & Learning Resources",
+        m6_p1: "This course emphasizes 100% Zero-Cost execution. Using a 'Serverless + Edge Computing' philosophy eliminates environment setup frustrations. We integrate DataCamp as Flipped Classroom resources to build technical vocabulary.",
+        m6_setup: "Zero-Cost Cloud Environment 4-Step Setup:",
+        m6_setup_list: [
+          "LLM Engine: Google AI Studio (Gemini API). Strict BYOK (Bring Your Own Key) & sessionStorage policy.",
+          "AI IDE: Cursor (Preferred) or VS Code + AI extension. Command via natural language.",
+          "Runtime: PyScript / WebAssembly. Python executes directly in the browser.",
+          "Deployment: GitHub Pages or Vercel. Free public hosting."
+        ],
+        m6_datacamp: "DataCamp Core Modules:\n• Pre-W2: ChatGPT Prompt Engineering\n• W1-W2: Understanding AI\n• W3-W4: Data Science for Business\n• W5-W6: Intro to Python\n• W7-W8: Data Manipulation with pandas",
+        m6_terms: [
+          { front: "BYOK", back: "Bring Your Own Key. A security mechanism where apps don't embed API keys but ask users to input their own, temporarily stored in the browser." },
+          { front: "WebAssembly", back: "Technology enabling code execution at near-native speed in web browsers. PyScript uses this to run Python directly on the frontend." }
+        ],
+        m6_q: [
+          { q: "What is the purpose of strictly requiring the BYOK mechanism?", opts: ["To load pages faster", "To ensure keys aren't hardcoded, implementing enterprise-grade security and key non-persistence", "To force students to buy software", "To connect to local databases"], ans: 1, exp: "BYOK is vital in Serverless security. Using sessionStorage prevents API keys from leaking via source code." },
+          { q: "What is the primary role of DataCamp in this course?", opts: ["Training students to independently develop large software", "Replacing all physical classes", "Vocabulary Building, so students can read code and precisely command AI", "Grading exams"], ans: 2, exp: "DataCamp aims to equip non-coding students with basic Technical Vocab so they can write professional Prompt specifications." }
+        ],
+
+        date: "Version 2026.03.08",
+        copyright: "© 2026 All rights reserved.",
+        architect: "Architect: Prof. Shihmin Lo"
+      }
+    };
+
+    // --- Component: Flip Card ---
+    const FlipCard = ({ front, back, t }) => {
+      const [isFlipped, setIsFlipped] = useState(false);
+      return (
+        <div 
+          className="relative w-full h-32 md:h-40 perspective cursor-pointer group my-2"
+          onClick={() => setIsFlipped(!isFlipped)}
+        >
+          <div className={`w-full h-full transition-transform duration-500 transform-style-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
+            {/* Front */}
+            <div className="absolute w-full h-full backface-hidden bg-brand-primary dark:bg-[#002b20] text-white dark:text-[#D8C3A5] flex flex-col items-center justify-center p-4 rounded-xl border border-blue-400/30 dark:border-[#D8C3A5]/30 shadow-md">
+              <span className="text-lg md:text-xl font-serif font-bold text-center">{front}</span>
+              <span className="mt-2 text-xs opacity-60 flex items-center"><IconShuffle size={12} className="mr-1"/>{t.flip_prompt}</span>
+            </div>
+            {/* Back */}
+            <div className="absolute w-full h-full backface-hidden rotate-y-180 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 flex items-center justify-center p-4 md:p-6 rounded-xl border-2 border-brand-primary shadow-md overflow-y-auto">
+              <p className="text-sm font-medium text-center">{back}</p>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    // --- Component: Quiz Module ---
+    const ModuleQuiz = ({ questions, t, moduleId, onQuizSubmit }) => {
+      const [selectedIndices, setSelectedIndices] = useState([]);
+      const [answers, setAnswers] = useState({0: null, 1: null});
+      const [submitted, setSubmitted] = useState(false);
+
+      const initQuiz = () => {
+        if (!questions || questions.length === 0) return;
+        const indices = questions.map((_, i) => i).sort(() => 0.5 - Math.random()).slice(0, 2);
+        setSelectedIndices(indices);
+        setAnswers({0: null, 1: null});
+        setSubmitted(false);
+      };
+
+      useEffect(() => {
+        initQuiz();
+      }, [moduleId]);
+
+      if (selectedIndices.length === 0) return null;
+      
+      const score = Object.keys(answers).filter(k => {
+        const qIdx = selectedIndices[k];
+        return answers[k] === questions[qIdx]?.ans;
+      }).length;
+
+      const handleSubmit = () => {
+        setSubmitted(true);
+        if (onQuizSubmit) {
+          onQuizSubmit(moduleId, score, 2); 
+        }
+      };
+
+      return (
+        <div className="mt-12 bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl shadow-sm border-t-4 border-brand-primary transition-colors">
+          <h3 className="text-xl font-serif font-bold mb-6 text-brand-primary dark:text-brand-secondary flex items-center">
+            <IconCheckCircle className="mr-2" size={20}/> {t.quiz_title}
+          </h3>
+          <div className="space-y-8">
+            {selectedIndices.map((qIdxOrigin, uiIdx) => {
+              const q = questions[qIdxOrigin];
+              if (!q) return null;
+              return (
+                <div key={uiIdx} className="bg-slate-50 dark:bg-slate-700/50 p-5 rounded-xl border border-slate-200 dark:border-slate-600">
+                  <h4 className="text-base font-semibold mb-4 text-slate-800 dark:text-slate-100">{uiIdx + 1}. {q.q}</h4>
+                  <div className="space-y-2">
+                    {q.opts.map((opt, oIdx) => {
+                      const isSelected = answers[uiIdx] === oIdx;
+                      const isCorrect = oIdx === q.ans;
+                      let btnClass = "w-full text-left p-3 rounded-lg border transition-all text-sm ";
+                      
+                      if (!submitted) {
+                        btnClass += isSelected ? "bg-brand-primary text-white border-brand-primary" : "bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-600 hover:border-brand-primary hover:bg-slate-50 dark:hover:bg-slate-700";
+                      } else {
+                        if (isCorrect) btnClass += "bg-emerald-100 dark:bg-emerald-900/40 border-emerald-500 font-bold text-emerald-900 dark:text-emerald-100";
+                        else if (isSelected && !isCorrect) btnClass += "bg-rose-100 dark:bg-rose-900/40 border-rose-500 text-rose-900 dark:text-rose-100 line-through opacity-70";
+                        else btnClass += "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600 opacity-50 text-slate-500 dark:text-slate-400";
+                      }
+
+                      return (
+                        <button key={oIdx} onClick={() => !submitted && setAnswers({...answers, [uiIdx]: oIdx})} className={btnClass} disabled={submitted}>
+                          {opt}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {submitted && (
+                    <div className={`mt-4 p-4 rounded-lg text-sm flex items-start ${answers[uiIdx] === q.ans ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-800 dark:text-emerald-200' : 'bg-rose-50 dark:bg-rose-900/20 text-rose-800 dark:text-rose-200'}`}>
+                      <div className="mr-2 mt-0.5">
+                        {answers[uiIdx] === q.ans ? <IconCheckCircle size={16}/> : <IconAlertTriangle size={16}/>}
+                      </div>
+                      <div><strong>{t.explanation}:</strong> {q.exp}</div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+          <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row justify-between items-center gap-4">
+            {!submitted ? (
+              <button 
+                onClick={handleSubmit}
+                disabled={Object.values(answers).includes(null)}
+                className="w-full sm:w-auto px-8 py-3 bg-brand-primary text-white font-bold rounded-lg hover:bg-blue-800 disabled:opacity-50 transition-colors"
+              >
+                {t.submit}
+              </button>
+            ) : (
+              <>
+                <div className="text-xl font-serif font-bold text-brand-primary dark:text-brand-secondary">
+                  {t.score}: {score} / 2
+                </div>
+                <button 
+                  onClick={initQuiz}
+                  className="w-full sm:w-auto px-6 py-2 bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 font-medium rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
+                >
+                  {t.retry}
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      );
+    };
+
+    // --- Component: Interactive Multi-Agent Lab ---
+    const InteractiveAgentLab = ({ t }) => {
+      const [step, setStep] = useState(0); // 0-5
+
+      const reset = () => setStep(0);
+      const nextStep = () => setStep(s => Math.min(5, s + 1));
+      const setReject = () => setStep(6); // special state for reject
+
+      return (
+        <div className="bg-slate-900 text-slate-200 p-6 rounded-xl shadow-lg border border-slate-700 overflow-hidden font-sans">
+          <h4 className="text-brand-secondary font-bold text-lg mb-6 flex items-center border-b border-slate-700 pb-3">
+            <IconWorkflow className="mr-2"/> Virtual Cross-Functional Committee
+          </h4>
+          
+          <div className="flex flex-col md:flex-row justify-between items-center mb-8 relative px-4">
+            {/* Connecting Line */}
+            <div className="hidden md:block absolute top-1/2 left-8 right-8 h-1 bg-slate-700 -z-10 -translate-y-1/2"></div>
+            
+            {/* Nodes */}
+            {[
+              { id: 1, icon: <IconServer size={20}/>, label: t.m4_step_data },
+              { id: 2, icon: <IconBarChart2 size={20}/>, label: t.m4_step_analyst },
+              { id: 3, icon: <IconAlertTriangle size={20}/>, label: t.m4_step_critic },
+              { id: 4, icon: <IconUsers size={20}/>, label: t.m4_step_human }
+            ].map((node) => (
+              <div key={node.id} className="flex flex-col items-center z-10 mb-4 md:mb-0 bg-slate-900 px-2">
+                <div className={`w-14 h-14 rounded-full flex items-center justify-center transition-all duration-500 ${
+                  step === node.id ? 'bg-brand-secondary text-slate-900 active-agent scale-110' :
+                  step > node.id ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-500 border-2 border-slate-700'
+                }`}>
+                  {step > node.id ? <IconCheckCircle size={24}/> : node.icon}
+                </div>
+                <span className={`text-xs mt-2 font-medium ${step >= node.id ? 'text-slate-200' : 'text-slate-500'}`}>{node.label}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Console Output */}
+          <div className="bg-black p-4 rounded-lg font-mono text-sm h-40 overflow-y-auto mb-6 border border-slate-800 shadow-inner">
+            <div className="opacity-50 mb-2">{t.m4_log_0}</div>
+            {step >= 1 && <div className="text-blue-400 mb-2">{t.m4_log_1}</div>}
+            {step >= 2 && <div className="text-purple-400 mb-2">{t.m4_log_2}</div>}
+            {step >= 3 && <div className="text-amber-400 mb-2">{t.m4_log_3}</div>}
+            {step >= 4 && step !== 6 && <div className="text-rose-400 mb-2 font-bold animate-pulse">{t.m4_log_4}</div>}
+            {step === 5 && <div className="text-emerald-400 mb-2">{t.m4_log_5a}</div>}
+            {step === 6 && <div className="text-rose-500 mb-2">{t.m4_log_5b}</div>}
+          </div>
+
+          {/* Controls */}
+          <div className="flex justify-center gap-4">
+            {step === 0 && (
+              <button onClick={nextStep} className="bg-brand-primary hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-bold flex items-center transition">
+                <IconPlay size={18} className="mr-2"/> {t.m4_run_btn}
+              </button>
+            )}
+            {step > 0 && step < 4 && step !== 6 && (
+              <button onClick={nextStep} className="bg-slate-700 hover:bg-slate-600 text-white px-6 py-2 rounded-lg font-medium transition">
+                Next Process ...
+              </button>
+            )}
+            {step === 4 && (
+              <>
+                <button onClick={nextStep} className="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2 rounded-lg font-bold transition flex items-center">
+                  <IconCheckCircle size={18} className="mr-2"/> {t.m4_approve}
+                </button>
+                <button onClick={setReject} className="bg-rose-600 hover:bg-rose-500 text-white px-6 py-2 rounded-lg font-bold transition flex items-center">
+                  <IconX size={18} className="mr-2"/> {t.m4_reject}
+                </button>
+              </>
+            )}
+            {(step === 5 || step === 6) && (
+              <button onClick={reset} className="bg-slate-700 hover:bg-slate-600 text-white px-6 py-2 rounded-lg font-medium transition flex items-center">
+                <IconShuffle size={18} className="mr-2"/> Reset Pipeline
+              </button>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+
+    // --- Main App Component ---
+    function App() {
+      const [lang, setLang] = useState('zh');
+      const [isDark, setIsDark] = useState(false);
+      const [module, setModule] = useState(0);
+      const [menuOpen, setMenuOpen] = useState(false);
+      const [ttsState, setTtsState] = useState('idle');
+      const [studentInfo, setStudentInfo] = useState({ group: '', dept: '', id: '', name: '' });
+
+      const [analytics, setAnalytics] = useState({
+        time: Array(8).fill(0), 
+        clicks: Array(8).fill(0), 
+        quizCorrect: Array(8).fill(0),
+        quizTotal: Array(8).fill(0)
+      });
+
+      const contentRef = useRef(null);
+      const t = dict[lang];
+
+      useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, [module]);
+
+      useEffect(() => {
+        if (module >= 8) return;
+        const timer = setInterval(() => {
+          setAnalytics(prev => {
+            const newTime = [...prev.time];
+            newTime[module] += 1;
+            return { ...prev, time: newTime };
+          });
+        }, 1000);
+        return () => clearInterval(timer);
+      }, [module]);
+
+      const handleMainClick = () => {
+        if (module >= 8) return;
+        setAnalytics(prev => {
+          const newClicks = [...prev.clicks];
+          newClicks[module] += 1;
+          return { ...prev, clicks: newClicks };
+        });
+      };
+
+      const handleQuizSubmit = (modId, correct, total) => {
+        setAnalytics(prev => {
+          const newCorrect = [...prev.quizCorrect];
+          const newTotal = [...prev.quizTotal];
+          newCorrect[modId] += correct;
+          newTotal[modId] += total;
+          return { ...prev, quizCorrect: newCorrect, quizTotal: newTotal };
+        });
+      };
+
+      const handleExportCSV = () => {
+        if (!studentInfo.group || !studentInfo.dept || !studentInfo.id || !studentInfo.name) return;
+        let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+        csvContent += "Date,Time,Group,Dept,StudentID,Name,Module,TimeSpent(s),Clicks,Correct,Answered,TotalQuestions,Accuracy(%)\n";
+        
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('zh-TW');
+        const timeStr = now.toLocaleTimeString('zh-TW');
+        
+        modulesList.slice(0, 7).forEach((m, idx) => {
+          const time = analytics.time[idx];
+          const clicks = analytics.clicks[idx];
+          const correct = analytics.quizCorrect[idx];
+          const answered = analytics.quizTotal[idx];
+          const totalQ = 2; // Real rendered questions
+          const acc = answered > 0 ? Math.round((correct / answered) * 100) : 0;
+          const moduleTitle = m.title.replace(/,/g, '，');
+          const row = [dateStr, timeStr, studentInfo.group, studentInfo.dept, studentInfo.id, studentInfo.name, moduleTitle, time, clicks, correct, answered, totalQ, acc].join(",");
+          csvContent += row + "\n";
+        });
+        
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `BAPM_Analytics_${studentInfo.id}_${now.getTime()}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      };
+
+      useEffect(() => {
+        if (isDark) document.documentElement.classList.add('dark');
+        else document.documentElement.classList.remove('dark');
+      }, [isDark]);
+
+      const handleTTS = (action) => {
+        if (!('speechSynthesis' in window)) return;
+        if (action === 'stop') {
+          window.speechSynthesis.cancel();
+          setTtsState('idle');
+          return;
+        }
+        if (action === 'pause') {
+          window.speechSynthesis.pause();
+          setTtsState('paused');
+          return;
+        }
+        if (action === 'play') {
+          if (ttsState === 'paused') {
+            window.speechSynthesis.resume();
+            setTtsState('playing');
+            return;
+          }
+          window.speechSynthesis.cancel();
+          
+          let textToRead = "";
+          if (module < 7) {
+            const textSources = [
+              [t.m0_title, t.m0_p1, t.m0_p2, t.m0_p3],
+              [t.m1_title, t.m1_p1, t.m1_p2, t.m1_p3],
+              [t.m2_title, t.m2_p1, t.m2_p2, t.m2_p3],
+              [t.m3_title, t.m3_p1, t.m3_p2, t.m3_p3],
+              [t.m4_title, t.m4_p1],
+              [t.m5_title, t.m5_p1, t.m5_roles.map(r=>r.title + r.desc).join(" ")],
+              [t.m6_title, t.m6_p1, t.m6_setup, t.m6_setup_list.join(" "), t.m6_datacamp],
+            ];
+            textToRead = textSources[module].join('。 ');
+          } else {
+            textToRead = t.analytics_title + "。 " + t.analytics_desc;
+          }
+
+          const utterance = new SpeechSynthesisUtterance(textToRead);
+          utterance.rate = 0.95; 
+          const voices = window.speechSynthesis.getVoices();
+          if (lang === 'zh') {
+            const twVoice = voices.find(v => v.lang.includes('zh-TW') && (v.name.includes('Yating') || v.name.includes('Han'))) || voices.find(v => v.lang.includes('zh'));
+            if (twVoice) utterance.voice = twVoice;
+          } else {
+            const ukVoice = voices.find(v => v.lang.includes('en-GB') && (v.name.includes('Male') || v.name.includes('Daniel'))) || voices.find(v => v.lang.includes('en-GB')) || voices.find(v => v.lang.includes('en'));
+            if (ukVoice) utterance.voice = ukVoice;
+          }
+          utterance.onend = () => setTtsState('idle');
+          window.speechSynthesis.speak(utterance);
+          setTtsState('playing');
+        }
+      };
+
+      useEffect(() => { handleTTS('stop'); }, [module, lang]);
+      useEffect(() => {
+        if ('speechSynthesis' in window) window.speechSynthesis.onvoiceschanged = () => {}; 
+        return () => { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); };
+      }, []);
+
+      const modulesList = [
+        { id: 0, title: t.nav_0, icon: <IconBookOpen size={18} /> },
+        { id: 1, title: t.nav_1, icon: <IconTarget size={18} /> },
+        { id: 2, title: t.nav_2, icon: <IconBarChart2 size={18} /> },
+        { id: 3, title: t.nav_3, icon: <IconCpu size={18} /> },
+        { id: 4, title: t.nav_4, icon: <IconWorkflow size={18} /> },
+        { id: 5, title: t.nav_5, icon: <IconUsers size={18} /> },
+        { id: 6, title: t.nav_6, icon: <IconServer size={18} /> },
+        { id: 7, title: t.nav_7, icon: <IconActivity size={18} /> },
+      ];
+
+      const renderAnalyticsDashboard = () => {
+        const totalTime = analytics.time.reduce((a, b) => a + b, 0);
+        const totalClicks = analytics.clicks.reduce((a, b) => a + b, 0);
+        const sumCorrect = analytics.quizCorrect.reduce((a, b) => a + b, 0);
+        const sumTotal = analytics.quizTotal.reduce((a, b) => a + b, 0);
+        const overallAcc = sumTotal > 0 ? Math.round((sumCorrect / sumTotal) * 100) : 0;
+        const maxTime = Math.max(...analytics.time, 1);
+        const maxClicks = Math.max(...analytics.clicks, 1);
+        const isFormValid = studentInfo.group && studentInfo.dept && studentInfo.id && studentInfo.name;
+
+        return (
+          <div className="space-y-8 animate-fade-in">
+            <h2 className="text-3xl md:text-4xl font-serif font-black text-brand-primary dark:text-brand-secondary border-b-2 border-brand-secondary pb-4">{t.analytics_title}</h2>
+            <p className="text-lg text-slate-700 dark:text-slate-300 mb-8">{t.analytics_desc}</p>
+            
+            <div className="bg-slate-50 dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm mb-8">
+              <h3 className="text-xl font-serif font-bold text-brand-primary dark:text-brand-secondary mb-4">{t.analytics_form_title}</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t.analytics_group}</label>
+                  <select value={studentInfo.group} onChange={e=>setStudentInfo({...studentInfo, group: e.target.value})} className="w-full p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-sm focus:ring-2 focus:ring-brand-primary outline-none">
+                    <option value="">-- Select --</option>
+                    {t.group_options.map(g => <option key={g} value={g}>{g}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t.analytics_dept}</label>
+                  <input type="text" placeholder={t.analytics_dept_ph} value={studentInfo.dept} onChange={e=>setStudentInfo({...studentInfo, dept: e.target.value})} className="w-full p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-sm focus:ring-2 focus:ring-brand-primary outline-none"/>
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t.analytics_id}</label>
+                  <input type="text" placeholder={t.analytics_id_ph} value={studentInfo.id} onChange={e=>setStudentInfo({...studentInfo, id: e.target.value})} className="w-full p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-sm focus:ring-2 focus:ring-brand-primary outline-none"/>
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">{t.analytics_name}</label>
+                  <input type="text" placeholder={t.analytics_name_ph} value={studentInfo.name} onChange={e=>setStudentInfo({...studentInfo, name: e.target.value})} className="w-full p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-sm focus:ring-2 focus:ring-brand-primary outline-none"/>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border-l-4 border-brand-primary dark:border-brand-secondary shadow-sm flex flex-col justify-center">
+                <div className="text-sm text-slate-500 uppercase font-bold tracking-wider mb-2">{t.analytics_total_time}</div>
+                <div className="text-4xl font-serif font-black text-brand-primary dark:text-brand-secondary">{totalTime}<span className="text-lg font-sans font-normal text-slate-500 ml-2">{t.analytics_sec}</span></div>
+              </div>
+              <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border-l-4 border-brand-primary dark:border-brand-secondary shadow-sm flex flex-col justify-center">
+                <div className="text-sm text-slate-500 uppercase font-bold tracking-wider mb-2">{t.analytics_total_clicks}</div>
+                <div className="text-4xl font-serif font-black text-brand-primary dark:text-brand-secondary">{totalClicks}<span className="text-lg font-sans font-normal text-slate-500 ml-2">{t.analytics_times}</span></div>
+              </div>
+              <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border-l-4 border-brand-primary dark:border-brand-secondary shadow-sm flex flex-col justify-center">
+                <div className="text-sm text-slate-500 uppercase font-bold tracking-wider mb-2">{t.analytics_overall_acc}</div>
+                <div className="text-4xl font-serif font-black text-brand-primary dark:text-brand-secondary">{sumTotal > 0 ? overallAcc : '--'}<span className="text-lg font-sans font-normal text-slate-500 ml-2">%</span></div>
+              </div>
+            </div>
+
+            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden mt-8">
+              <div className="grid grid-cols-12 gap-4 p-5 bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 font-bold text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400">
+                <div className="col-span-12 md:col-span-4">{t.analytics_module}</div>
+                <div className="col-span-4 md:col-span-2">{t.analytics_time}</div>
+                <div className="col-span-4 md:col-span-2">{t.analytics_clicks}</div>
+                <div className="col-span-4 md:col-span-2">{t.analytics_acc}</div>
+                <div className="col-span-12 md:col-span-2 md:text-right text-slate-400">{t.analytics_correct_ans_total}</div>
+              </div>
+              <div className="divide-y divide-slate-100 dark:divide-slate-700">
+                {modulesList.slice(0, 7).map((m, idx) => {
+                  const time = analytics.time[idx];
+                  const clicks = analytics.clicks[idx];
+                  const correct = analytics.quizCorrect[idx];
+                  const answered = analytics.quizTotal[idx];
+                  const totalQ = 2; 
+                  const acc = answered > 0 ? Math.round((correct / answered) * 100) : null;
+                  
+                  return (
+                    <div key={idx} className="grid grid-cols-12 gap-4 p-5 items-center hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                      <div className="col-span-12 md:col-span-4 font-medium text-slate-800 dark:text-slate-200 truncate pr-2">{m.title}</div>
+                      <div className="col-span-4 md:col-span-2 flex items-center">
+                        <div className="w-10 text-right mr-2 text-sm font-mono text-slate-600 dark:text-slate-400">{time}s</div>
+                        <div className="flex-1 h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                          <div className="h-full bg-brand-secondary" style={{width: `${(time / maxTime) * 100}%`}}></div>
+                        </div>
+                      </div>
+                      <div className="col-span-4 md:col-span-2 flex items-center">
+                        <div className="w-8 text-right mr-2 text-sm font-mono text-slate-600 dark:text-slate-400">{clicks}</div>
+                        <div className="flex-1 h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                          <div className="h-full bg-slate-400 dark:bg-slate-500" style={{width: `${(clicks / maxClicks) * 100}%`}}></div>
+                        </div>
+                      </div>
+                      <div className="col-span-4 md:col-span-2 flex items-center">
+                        {acc !== null ? (
+                          <>
+                            <div className={`w-10 text-right mr-2 text-sm font-bold ${acc >= 80 ? 'text-emerald-600 dark:text-emerald-400' : acc >= 50 ? 'text-amber-500' : 'text-rose-500'}`}>{acc}%</div>
+                            <div className="flex-1 h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                              <div className={`h-full ${acc >= 80 ? 'bg-emerald-500' : acc >= 50 ? 'bg-amber-400' : 'bg-rose-500'}`} style={{width: `${acc}%`}}></div>
+                            </div>
+                          </>
+                        ) : <span className="text-sm text-slate-400 italic">{t.analytics_no_data}</span>}
+                      </div>
+                      <div className="col-span-12 md:col-span-2 md:text-right font-mono text-sm font-bold text-slate-500 dark:text-slate-400">
+                         {answered > 0 ? `${correct} / ${answered} / ${totalQ}` : '--'}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-end">
+              {!isFormValid && <span className="text-xs text-rose-500 sm:mr-4 mb-3 sm:mb-0 font-medium">{t.analytics_fill_required}</span>}
+              <button onClick={handleExportCSV} disabled={!isFormValid} className="w-full sm:w-auto px-10 py-3 bg-brand-primary dark:bg-brand-secondary text-white dark:text-slate-900 font-bold rounded-lg shadow-sm hover:opacity-90 disabled:opacity-50 transition">
+                {t.analytics_export_csv}
+              </button>
+            </div>
+          </div>
+        );
+      };
+
+      const renderModuleContent = () => {
+        const fadeInClass = "animate-fade-in";
+        switch(module) {
+          case 0:
+            return (
+              <div className={`space-y-6 text-lg leading-relaxed text-slate-700 dark:text-slate-300 ${fadeInClass}`}>
+                <h2 className="text-3xl md:text-4xl font-serif font-black text-brand-primary dark:text-brand-secondary border-b-2 border-brand-secondary pb-4">{t.m0_title}</h2>
+                <div className="flex flex-col md:flex-row gap-6 items-start mt-6">
+                  <div className="flex-1 space-y-4">
+                    <p>{t.m0_p1}</p>
+                    <p>{t.m0_p2}</p>
+                  </div>
+                  <div className="w-full md:w-1/3 bg-slate-50 dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 flex flex-col shadow-sm">
+                    <h4 className="font-bold text-brand-primary dark:text-brand-secondary mb-2 flex items-center"><IconTarget size={18} className="mr-2"/> Deliverable</h4>
+                    <p className="text-base">{t.m0_p3}</p>
+                  </div>
+                </div>
+                <div className="mt-8">
+                  <h3 className="text-lg font-bold uppercase tracking-wider text-slate-500 mb-4">{t.key_terms}</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {t.m0_terms.map((term, i) => <FlipCard key={i} front={term.front} back={term.back} t={t} />)}
+                  </div>
+                </div>
+                <ModuleQuiz questions={t.m0_q} t={t} moduleId={module} onQuizSubmit={handleQuizSubmit} />
+              </div>
+            );
+          case 1:
+            return (
+              <div className={`space-y-6 text-lg leading-relaxed text-slate-700 dark:text-slate-300 ${fadeInClass}`}>
+                <h2 className="text-3xl md:text-4xl font-serif font-black text-brand-primary dark:text-brand-secondary border-b-2 border-brand-secondary pb-4">{t.m1_title}</h2>
+                <p>{t.m1_p1}</p>
+                <div className="p-5 bg-brand-light dark:bg-slate-800 rounded-xl border-l-4 border-brand-primary dark:border-brand-secondary shadow-sm my-6">
+                  <p className="font-medium text-brand-primary dark:text-brand-secondary">{t.m1_p2}</p>
+                </div>
+                <p>{t.m1_p3}</p>
+                <div className="mt-8">
+                  <h3 className="text-lg font-bold uppercase tracking-wider text-slate-500 mb-4">{t.key_terms}</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {t.m1_terms.map((term, i) => <FlipCard key={i} front={term.front} back={term.back} t={t} />)}
+                  </div>
+                </div>
+                <ModuleQuiz questions={t.m1_q} t={t} moduleId={module} onQuizSubmit={handleQuizSubmit} />
+              </div>
+            );
+          case 2:
+            return (
+              <div className={`space-y-6 text-lg leading-relaxed text-slate-700 dark:text-slate-300 ${fadeInClass}`}>
+                <h2 className="text-3xl md:text-4xl font-serif font-black text-brand-primary dark:text-brand-secondary border-b-2 border-brand-secondary pb-4">{t.m2_title}</h2>
+                <p>{t.m2_p1}</p>
+                <p>{t.m2_p2}</p>
+                <p>{t.m2_p3}</p>
+                <div className="mt-8">
+                  <h3 className="text-lg font-bold uppercase tracking-wider text-slate-500 mb-4">{t.key_terms}</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {t.m2_terms.map((term, i) => <FlipCard key={i} front={term.front} back={term.back} t={t} />)}
+                  </div>
+                </div>
+                <ModuleQuiz questions={t.m2_q} t={t} moduleId={module} onQuizSubmit={handleQuizSubmit} />
+              </div>
+            );
+          case 3:
+            return (
+              <div className={`space-y-6 text-lg leading-relaxed text-slate-700 dark:text-slate-300 ${fadeInClass}`}>
+                <h2 className="text-3xl md:text-4xl font-serif font-black text-brand-primary dark:text-brand-secondary border-b-2 border-brand-secondary pb-4">{t.m3_title}</h2>
+                <p>{t.m3_p1}</p>
+                <p>{t.m3_p2}</p>
+                <p className="p-4 bg-slate-100 dark:bg-slate-800 rounded-lg italic font-serif">{t.m3_p3}</p>
+                <div className="mt-8">
+                  <h3 className="text-lg font-bold uppercase tracking-wider text-slate-500 mb-4">{t.key_terms}</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {t.m3_terms.map((term, i) => <FlipCard key={i} front={term.front} back={term.back} t={t} />)}
+                  </div>
+                </div>
+                <ModuleQuiz questions={t.m3_q} t={t} moduleId={module} onQuizSubmit={handleQuizSubmit} />
+              </div>
+            );
+          case 4:
+            return (
+              <div className={`space-y-6 text-lg leading-relaxed text-slate-700 dark:text-slate-300 ${fadeInClass}`}>
+                <h2 className="text-3xl md:text-4xl font-serif font-black text-brand-primary dark:text-brand-secondary border-b-2 border-brand-secondary pb-4">{t.m4_title}</h2>
+                <p>{t.m4_p1}</p>
+                <div className="mt-8">
+                  <InteractiveAgentLab t={t} />
+                </div>
+                <div className="mt-8">
+                  <h3 className="text-lg font-bold uppercase tracking-wider text-slate-500 mb-4">{t.key_terms}</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {t.m4_terms.map((term, i) => <FlipCard key={i} front={term.front} back={term.back} t={t} />)}
+                  </div>
+                </div>
+                <ModuleQuiz questions={t.m4_q} t={t} moduleId={module} onQuizSubmit={handleQuizSubmit} />
+              </div>
+            );
+          case 5:
+            return (
+              <div className={`space-y-6 text-lg leading-relaxed text-slate-700 dark:text-slate-300 ${fadeInClass}`}>
+                <h2 className="text-3xl md:text-4xl font-serif font-black text-brand-primary dark:text-brand-secondary border-b-2 border-brand-secondary pb-4">{t.m5_title}</h2>
+                <p>{t.m5_p1}</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                  {t.m5_roles.map((role, i) => (
+                    <div key={i} className={`p-5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm ${i===0 ? 'md:col-span-2 border-brand-secondary dark:border-brand-primary bg-brand-light dark:bg-slate-800/80' : ''}`}>
+                      <h4 className="font-bold text-xl text-brand-primary dark:text-brand-secondary mb-2">{role.title}</h4>
+                      <p className="text-base">{role.desc}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-8">
+                  <h3 className="text-lg font-bold uppercase tracking-wider text-slate-500 mb-4">{t.key_terms}</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {t.m5_terms.map((term, i) => <FlipCard key={i} front={term.front} back={term.back} t={t} />)}
+                  </div>
+                </div>
+                <ModuleQuiz questions={t.m5_q} t={t} moduleId={module} onQuizSubmit={handleQuizSubmit} />
+              </div>
+            );
+          case 6:
+            return (
+              <div className={`space-y-6 text-lg leading-relaxed text-slate-700 dark:text-slate-300 ${fadeInClass}`}>
+                <h2 className="text-3xl md:text-4xl font-serif font-black text-brand-primary dark:text-brand-secondary border-b-2 border-brand-secondary pb-4">{t.m6_title}</h2>
+                <p>{t.m6_p1}</p>
+                
+                <div className="flex flex-col md:flex-row gap-6 mt-8">
+                  <div className="flex-1 bg-white dark:bg-slate-800 p-6 rounded-xl border-l-4 border-brand-primary shadow-sm">
+                    <h3 className="font-bold text-xl mb-4 text-brand-primary dark:text-brand-secondary">{t.m6_setup}</h3>
+                    <ul className="space-y-3 list-disc pl-5">
+                      {t.m6_setup_list.map((item, i) => <li key={i} className="text-base">{item}</li>)}
+                    </ul>
+                  </div>
+                  <div className="flex-1 bg-white dark:bg-slate-800 p-6 rounded-xl border-l-4 border-brand-secondary shadow-sm">
+                    <h3 className="font-bold text-xl mb-4 text-brand-primary dark:text-brand-secondary">DataCamp Integration</h3>
+                    <p className="text-base whitespace-pre-line leading-loose">{t.m6_datacamp}</p>
+                  </div>
+                </div>
+
+                <div className="mt-8">
+                  <h3 className="text-lg font-bold uppercase tracking-wider text-slate-500 mb-4">{t.key_terms}</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {t.m6_terms.map((term, i) => <FlipCard key={i} front={term.front} back={term.back} t={t} />)}
+                  </div>
+                </div>
+                <ModuleQuiz questions={t.m6_q} t={t} moduleId={module} onQuizSubmit={handleQuizSubmit} />
+              </div>
+            );
+          case 7:
+            return renderAnalyticsDashboard();
+          default:
+            return null;
+        }
+      };
+
+      return (
+        <div className={`min-h-screen bg-slate-50 dark:bg-slate-900 font-sans selection:bg-brand-primary selection:text-white dark:selection:bg-brand-secondary dark:selection:text-slate-900 transition-colors duration-300 ${isDark ? 'dark' : ''}`}>
+          
+          {menuOpen && (
+            <div className="fixed inset-0 bg-black/40 z-40 transition-opacity" onClick={() => setMenuOpen(false)} />
+          )}
+
+          {/* Header */}
+          <header className="bg-white dark:bg-brand-dark text-slate-800 dark:text-white sticky top-0 z-50 shadow-sm border-b border-slate-200 dark:border-slate-800 transition-colors h-16">
+            <div className="max-w-7xl mx-auto px-4 h-full flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <button className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md transition-colors relative z-50" onClick={() => setMenuOpen(!menuOpen)}>
+                  {menuOpen ? <IconX size={24} /> : <IconMenu size={24} />}
+                </button>
+                <div className="cursor-pointer group flex items-center" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+                  <div className="w-8 h-8 bg-brand-primary dark:bg-brand-secondary flex items-center justify-center text-white dark:text-brand-dark font-serif font-bold text-xl mr-3 group-hover:opacity-90 transition-opacity">
+                    B
+                  </div>
+                  <div className="hidden sm:block">
+                    <h1 className="text-lg font-serif font-bold leading-tight tracking-tight text-brand-primary dark:text-white group-hover:opacity-80 transition-colors">{t.title}</h1>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex items-center space-x-2 md:space-x-4">
+                <div className="hidden sm:flex items-center bg-slate-100 dark:bg-slate-800 rounded-full px-2 py-1 mr-2 border border-slate-200 dark:border-slate-700">
+                  <span className="text-xs font-bold uppercase mr-2 ml-2 opacity-50">{t.audio_read}</span>
+                  {ttsState !== 'playing' ? (
+                    <button onClick={() => handleTTS('play')} className="p-1.5 hover:bg-white dark:hover:bg-slate-700 rounded-full text-brand-primary dark:text-brand-secondary transition"><IconPlay size={16} fill="currentColor"/></button>
+                  ) : (
+                    <button onClick={() => handleTTS('pause')} className="p-1.5 hover:bg-white dark:hover:bg-slate-700 rounded-full text-brand-primary dark:text-brand-secondary transition"><IconPause size={16} fill="currentColor"/></button>
+                  )}
+                  <button onClick={() => handleTTS('stop')} className="p-1.5 hover:bg-white dark:hover:bg-slate-700 rounded-full text-slate-500 transition"><IconSquare size={16} fill="currentColor"/></button>
+                </div>
+
+                <button onClick={() => setIsDark(!isDark)} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors text-slate-600 dark:text-slate-300">
+                  {isDark ? <IconSun size={20} /> : <IconMoon size={20} />}
+                </button>
+
+                <button onClick={() => setLang(lang === 'zh' ? 'en' : 'zh')} className="flex items-center bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 px-3 py-1.5 rounded-full text-sm font-bold transition-colors border border-slate-300 dark:border-slate-600 shadow-sm">
+                  <IconGlobe size={16} className="mr-2 text-brand-primary dark:text-brand-secondary" />
+                  {lang === 'zh' ? 'EN' : '中文'}
+                </button>
+              </div>
+            </div>
+            <div className="h-1 bg-slate-100 dark:bg-slate-800 w-full absolute bottom-0 left-0">
+              <div className="h-full bg-brand-primary dark:bg-brand-secondary transition-all duration-500 ease-out" style={{ width: `${(module / 7) * 100}%` }}></div>
+            </div>
+          </header>
+
+          {/* Main Content Layout */}
+          <div className="max-w-7xl mx-auto px-4 py-8 relative flex flex-col md:flex-row gap-8 min-h-[calc(100vh-6rem)]">
+            
+            {/* Floating Dropdown Navigation */}
+            <div className="fixed inset-x-0 top-20 z-50 pointer-events-none px-4 flex justify-center">
+              <div className="w-full max-w-7xl relative">
+                <div className={`absolute top-0 left-0 pointer-events-auto w-full sm:w-80 bg-white dark:bg-brand-dark rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 transition-all duration-300 ease-in-out origin-top overflow-hidden ${menuOpen ? 'opacity-100 scale-y-100 max-h-[80vh]' : 'opacity-0 scale-y-0 max-h-0 border-transparent'}`}>
+                  <div className="p-5 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 font-serif font-bold text-brand-primary dark:text-brand-secondary tracking-widest uppercase text-sm flex justify-between items-center">
+                    {t.nav_modules}
+                    <button className="text-slate-500 hover:text-slate-800 dark:hover:text-white transition-colors" onClick={() => setMenuOpen(false)}><IconX size={20}/></button>
+                  </div>
+                  <nav className="flex flex-col py-2 overflow-y-auto max-h-[calc(80vh-4rem)]">
+                    {modulesList.map((m) => (
+                      <button key={m.id} onClick={() => { setModule(m.id); setMenuOpen(false); }} className={`flex items-center w-full text-left px-5 py-4 text-sm font-medium transition-colors border-l-4 ${module === m.id ? 'bg-slate-50 dark:bg-slate-800 border-brand-primary dark:border-brand-secondary text-brand-primary dark:text-white font-bold' : 'border-transparent text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-slate-200'}`}>
+                        <span className={`mr-3 ${module === m.id ? 'text-brand-primary dark:text-brand-secondary' : 'opacity-50'}`}>{m.icon}</span>
+                        {m.title}
+                        {module === m.id && <IconChevronRight size={16} className="ml-auto opacity-50" />}
+                      </button>
+                    ))}
+                  </nav>
+                </div>
+              </div>
+            </div>
+
+            {/* Main Content Area */}
+            <main className="flex-1 min-w-0 pb-16 transition-all duration-300" onClick={handleMainClick}>
+              <div className="sm:hidden flex items-center bg-white dark:bg-slate-800 rounded-full px-4 py-2 mb-6 shadow-sm border border-slate-200 dark:border-slate-700 justify-between">
+                 <span className="text-sm font-bold text-slate-600 dark:text-slate-300 flex items-center"><IconGlobe size={16} className="mr-2"/> {t.audio_read}</span>
+                 <div className="flex space-x-2">
+                  {ttsState !== 'playing' ? (
+                    <button onClick={() => handleTTS('play')} className="p-2 bg-brand-light dark:bg-brand-secondary/10 rounded-full text-brand-primary dark:text-brand-secondary"><IconPlay size={16} fill="currentColor"/></button>
+                  ) : (
+                    <button onClick={() => handleTTS('pause')} className="p-2 bg-brand-light dark:bg-brand-secondary/10 rounded-full text-brand-primary dark:text-brand-secondary"><IconPause size={16} fill="currentColor"/></button>
+                  )}
+                  <button onClick={() => handleTTS('stop')} className="p-2 bg-slate-100 dark:bg-slate-700 rounded-full text-slate-600 dark:text-slate-300"><IconSquare size={16} fill="currentColor"/></button>
+                 </div>
+              </div>
+
+              <div ref={contentRef} className="scroll-mt-24">
+                {renderModuleContent()}
+              </div>
+              
+              <div className="mt-12 flex justify-between items-center pt-8 border-t border-slate-300 dark:border-slate-700">
+                <button onClick={() => setModule(Math.max(0, module - 1))} disabled={module === 0} className="px-6 py-3 rounded-none font-serif font-bold text-slate-500 dark:text-slate-400 hover:text-brand-primary dark:hover:text-brand-secondary disabled:opacity-0 transition-colors flex items-center uppercase text-sm tracking-wider">
+                  ← {t.nav_prev}
+                </button>
+                <button onClick={() => setModule(Math.min(7, module + 1))} disabled={module === 7} className="px-8 py-3 bg-brand-primary dark:bg-brand-secondary text-white dark:text-slate-900 font-serif font-bold hover:opacity-90 disabled:opacity-0 transition-opacity flex items-center uppercase text-sm tracking-wider shadow-md rounded-lg">
+                  {t.nav_next} <IconArrowRight size={16} className="ml-2" />
+                </button>
+              </div>
+            </main>
+          </div>
+
+          {/* Footer */}
+          <footer className="bg-brand-dark text-slate-400 border-t border-slate-800">
+            <div className="max-w-7xl mx-auto px-4 h-10 flex justify-between items-center text-[10px] sm:text-xs">
+              <div className="flex items-center space-x-2 md:space-x-4">
+                <div className="font-serif font-bold text-brand-secondary hidden sm:block">BAPM</div>
+                <span className="truncate">{t.copyright} {t.date}</span>
+              </div>
+              
+              <div className="flex items-center space-x-3 md:space-x-4">
+                <a href="https://www.ibs.ncnu.edu.tw/index.php/faculty/tenured-professor/299-smlo" target="_blank" rel="noopener noreferrer" className="text-brand-secondary hover:text-white font-serif border-b border-transparent hover:border-brand-secondary transition-all truncate">
+                  {t.architect}
+                </a>
+                <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center uppercase tracking-widest hover:text-white transition-colors border-l border-slate-700 pl-3">
+                  <IconChevronUp size={12} className="md:mr-1" /> <span className="hidden sm:inline">TOP</span>
+                </button>
+              </div>
+            </div>
+          </footer>
+
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
